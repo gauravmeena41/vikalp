@@ -1,12 +1,13 @@
+// @ts-nocheck
+
 import mongoose from "mongoose";
 
-console.log(process.env.DEV_MONGO_URI);
-
-const connectDb = async () =>
+const connectDb = async () => {
   mongoose
-    .connect(
-      process.env.DEV_MONGO_URI
-    )
+    .connect(process.env.DEV_MONGO_URI, {
+      useNewUrlParser: true,
+      useUnifiedTopology: true,
+    })
     .then((res: any) => console.log("Connected to MongoDB"));
-
+};
 export default connectDb;

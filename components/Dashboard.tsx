@@ -3,7 +3,7 @@ import Sidebar from "./Sidebar"
 const Dashboard = () => {
   return (
     <div>
-      <Sidebar/>
+      Dashboard
     </div>
   )
 }

@@ -13,10 +13,13 @@ const user = new Schema({
   phone: {
     type: String,
     required: true,
-    unique: true,
   },
   password: {
     type: String,
+    required: true,
+  },
+  role: {
+    type: Boolean,
     required: true,
   },
   termsAndConditions: {
@@ -31,4 +34,4 @@ const user = new Schema({
 
 const User = models.User || model("User", user);
 
-export default User;
+module.exports = User;
