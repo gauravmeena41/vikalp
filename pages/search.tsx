@@ -10,8 +10,6 @@ import { SearchIcon } from "@heroicons/react/outline";
 import axios from "axios";
 import Router from "next/router";
 
-
-
 enum User {
   name = "",
   email = "",
@@ -21,7 +19,7 @@ enum User {
 }
 
 const search = () => {
-  const user:User = useRecoilValue(userState);
+  const user: User = useRecoilValue(userState);
   const [toggle, setToggle] = useState(false);
   const [complaintId, setComplaintId] = useState("");
   const [complaintDetails, setComplaintDetails] = useState({
@@ -34,37 +32,44 @@ const search = () => {
     respondentPhone: "",
     status: "",
   });
+  const [userComplaints, setUserComplaints] = useState([]);
 
   const fetchComplaint = async (complaintId: string) => {
-    let res = await axios.get(`/api/complaint/${complaintId}`);
-    console.log(res.data);
-    res.data.data
-      ? setComplaintDetails({
-          complaintId: res.data.data.comaplaintId,
-          complainantName: res.data.data.complainantName,
-          complainantEmail: res.data.data.complainantEmail,
-          complainantPhone: res.data.data.complainantPhone,
-          respondentName: res.data.data.respondentName,
-          respondentEmail: res.data.data.respondentEmail,
-          respondentPhone: res.data.data.respondentPhone,
-          status: res.data.data.status,
-        })
-      : setComplaintDetails({
-          complaintId: "",
-          complainantName: "",
-          complainantEmail: "",
-          complainantPhone: "",
-          respondentName: "",
-          respondentEmail: "",
-          respondentPhone: "",
-          status: "",
-        });
+    if (!toggle && complaintId) {
+      let res = await axios.get(`/api/complaint/${complaintId}`);
+      res.data.data
+        ? setComplaintDetails({
+            complaintId: res.data.data.comaplaintId,
+            complainantName: res.data.data.complainantName,
+            complainantEmail: res.data.data.complainantEmail,
+            complainantPhone: res.data.data.complainantPhone,
+            respondentName: res.data.data.respondentName,
+            respondentEmail: res.data.data.respondentEmail,
+            respondentPhone: res.data.data.respondentPhone,
+            status: res.data.data.status,
+          })
+        : setComplaintDetails({
+            complaintId: "",
+            complainantName: "",
+            complainantEmail: "",
+            complainantPhone: "",
+            respondentName: "",
+            respondentEmail: "",
+            respondentPhone: "",
+            status: "",
+          });
+    } else {
+      let res = await axios.get(
+        `/api/complaint/all?userId=${"62c82dbeea4b234384d2c550"}`
+      );
+      setUserComplaints(res.data.data);
+    }
   };
 
   useEffect(() => {
     user.email ? Router.push("/search") : Router.push("/login");
-    // fetchComplaint("F1657271561217Q");
-  }, []);
+    fetchComplaint(user.id);
+  }, [toggle]);
 
   if (!user.email) {
     return <div></div>;
@@ -100,7 +105,7 @@ const search = () => {
             </h1>
           </div>
           <div className="flex justify-center items-center mt-44 w-full">
-            {!toggle && (
+            {!toggle ? (
               <div className="space-y-5 flex flex-col items-center justify-center">
                 <h1 className="text-mainColor text-center font-bold text-xl">
                   Enter Case ID
@@ -119,7 +124,6 @@ const search = () => {
                     placeholder:text-secondaryColor placeholder:text-lg placeholder:font-medium"
                     onChange={(e) => {
                       setComplaintId(e.target.value);
-                      fetchComplaint(e.target.value);
                     }}
                   />
                 </div>
@@ -140,6 +144,96 @@ const search = () => {
                     ))}
                   </div>
                 )}
+              </div>
+            ) : (
+              <div>
+                <div className="grid grid-cols-8 w-[calc(100vw-80px)] border-y-2 border-secondaryColor animate-fade uppercase">
+                  <div>
+                    <div className="p-4 border-r-2 border-secondary flex items-center justify-center font-semibold text-mainColor">
+                      complaintId
+                    </div>
+                  </div>
+                  <div>
+                    <div className="p-4 border-r-2 border-secondary flex items-center justify-center font-semibold text-mainColor">
+                      complainantname
+                    </div>
+                  </div>
+                  <div>
+                    <div className="p-4 border-r-2 border-secondary flex items-center justify-center font-semibold text-mainColor">
+                      complainantemail
+                    </div>
+                  </div>
+                  <div>
+                    <div className="p-4 border-r-2 border-secondary flex items-center justify-center font-semibold text-mainColor">
+                      complainantphone
+                    </div>
+                  </div>
+                  <div>
+                    <div className="p-4 border-r-2 border-secondary flex items-center justify-center font-semibold text-mainColor">
+                      respondentname
+                    </div>
+                  </div>
+                  <div>
+                    <div className="p-4 border-r-2 border-secondary flex items-center justify-center font-semibold text-mainColor">
+                      respondentemail
+                    </div>
+                  </div>
+                  <div>
+                    <div className="p-4 border-r-2 border-secondary flex items-center justify-center font-semibold text-mainColor">
+                      respondentphone
+                    </div>
+                  </div>
+                  <div>
+                    <div className="p-4 border-r-2 border-secondary flex items-center justify-center font-semibold text-mainColor">
+                      status
+                    </div>
+                  </div>
+                </div>
+                {userComplaints.map((complaint) => (
+                  <div className="grid grid-cols-8 w-[calc(100vw-80px)] animate-fade">
+                    <div>
+                      <div className="p-4 text-xs flex items-center justify-center font-semibold text-gray-600">
+                        {complaint.comaplaintId}
+                      </div>
+                    </div>
+                    <div>
+                      <div className="p-4 text-xs flex items-center justify-center font-semibold text-gray-600">
+                        {complaint.complainantName}
+                      </div>
+                    </div>
+                    <div>
+                      <div className="p-4 text-xs flex items-center justify-center font-semibold text-gray-600">
+                        {complaint.complainantEmail}
+                      </div>
+                    </div>
+                    <div>
+                      <div className="p-4 text-xs flex items-center justify-center font-semibold text-gray-600">
+                        {complaint.complainantPhone}
+                      </div>
+                    </div>
+                    <div>
+                      <div className="p-4 text-xs flex items-center justify-center font-semibold text-gray-600">
+                        {complaint.respondentName}
+                      </div>
+                    </div>
+                    <div>
+                      <div className="p-4 text-xs flex items-center justify-center font-semibold text-gray-600">
+                        {complaint.respondentEmail}
+                      </div>
+                    </div>
+                    <div>
+                      <div className="p-4 text-xs flex items-center justify-center font-semibold text-gray-600">
+                        {complaint.respondentPhone}
+                      </div>
+                    </div>
+                    <div>
+                      <div className="p-4 text-xs flex items-center justify-center font-semibold text-gray-600">
+                        {complaint.status}
+                      </div>
+                    </div>
+                    {console.log(complaint)}
+                  </div>
+                ))}
               </div>
             )}
           </div>

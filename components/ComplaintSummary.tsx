@@ -23,6 +23,7 @@ const ComplaintSummary = () => {
     try {
       await axios.post("api/complaint/create", {
         odrProviderId: odrProvider.id,
+        complainantId: user.id,
         complaintDescription: complaintDetail.complaintDescription,
         complaintCategory: complaintDetail.complaintCategory,
         expectedResolution: complaintDetail.expectedResolution,

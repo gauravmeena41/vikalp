@@ -11,6 +11,10 @@ const ComplaintSchema = new Schema({
     type: String,
     ref: "User",
   },
+  complainantId: {
+    type: String,
+    required: true,
+  },
   complaintDescription: {
     type: String,
     required: true,

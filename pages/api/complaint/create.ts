@@ -11,6 +11,7 @@ export default async function handler(req: any, res: any) {
   try {
     const {
       odrProviderId,
+      complainantId,
       complaintDescription,
       complaintCategory,
       expectedResolution,
@@ -28,15 +29,25 @@ export default async function handler(req: any, res: any) {
     const odrProvider = await User.findOne({
       _id: mongoose.Types.ObjectId(odrProviderId),
     });
+    const user = await User.findOne({
+      _id: mongoose.Types.ObjectId(complainantId),
+    });
+    console.log(user)
     if (!odrProvider || (odrProvider && !odrProvider.role))
       return res.json({
         status: 0,
         message: "This ODR Provider is not registered on Vikalp",
       });
+    else if (!user)
+      return res.json({
+        status: 0,
+        message: "This user is not registered on Vikalp",
+      });
 
     const complaint = await Complaint.create({
       comaplaintId: await generateUniqueId(),
       odrProviderId,
+      complainantId,
       complaintDescription,
       complaintCategory,
       expectedResolution,
@@ -60,6 +71,7 @@ export default async function handler(req: any, res: any) {
     res.status(500).json({
       status: 0,
       message: "Internal server error",
+
     });
   }
-};
+}

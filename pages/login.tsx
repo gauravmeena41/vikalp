@@ -34,6 +34,7 @@ const Login = () => {
 
     res.data.data &&
       setUser({
+        id: res.data.data.id,
         name: res.data.data.name,
         email: res.data.data.email,
         phone: res.data.data.phone,
