@@ -4,7 +4,7 @@ import connectDb from "../../../utils/connectDb";
 import User from "../../../models/User";
 import Complaint from "../../../models/Complaint";
 import mongoose from "mongoose";
-import { generateUniqueId } from "../../../helper";
+import { generateUniqueId, sendMail } from "../../../helper";
 
 connectDb();
 export default async function handler(req: any, res: any) {
@@ -32,7 +32,6 @@ export default async function handler(req: any, res: any) {
     const user = await User.findOne({
       _id: mongoose.Types.ObjectId(complainantId),
     });
-    console.log(user)
     if (!odrProvider || (odrProvider && !odrProvider.role))
       return res.json({
         status: 0,
@@ -62,6 +61,9 @@ export default async function handler(req: any, res: any) {
       status,
       consent,
     });
+
+    // sendMail();
+
     res.status(200).json({
       status: 1,
       data: complaint,
@@ -71,7 +73,6 @@ export default async function handler(req: any, res: any) {
     res.status(500).json({
       status: 0,
       message: "Internal server error",
-
     });
   }
 }

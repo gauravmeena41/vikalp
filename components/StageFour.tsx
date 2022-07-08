@@ -24,6 +24,9 @@ const StageFour = () => {
           className="w-[250px] flex p-3 rounded-full text-white font-semibold cursor-pointer border-2
             border-secondaryColor"
           //   htmlFor="chooseFile" // Isse change kar dena bete bad me
+          onClick={()=>{
+            toast.error("File uploading not supported yet.");
+          }}
         >
           <PaperClipIcon className="w-7 h-7 text-mainColor mr-2" />
           Add Image

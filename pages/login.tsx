@@ -41,7 +41,7 @@ const Login = () => {
         role: res.data.data.role,
         termsAndConditions: res.data.data.termsAndConditions,
       });
-
+    res.data.data && toast.success("Logged In");
     res.data.status && Router.push("/");
     !res.data.status && toast.error(res.data.message);
   };

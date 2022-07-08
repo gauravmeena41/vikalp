@@ -24,7 +24,12 @@ const StageThree = () => {
         </p>
         <div className="grid grid-cols-3">
           <div
-            onClick={(e) => setOtherParty(e.target.innerHTML)}
+            onClick={(e) => {
+              setOtherParty(e.target.innerHTML);
+              toast.error(
+                "Only Individual is supported till now 🙂"
+              );
+            }}
             className={`${
               otherParty === "Enterprise"
                 ? "bg-mainColor text-[#f1f1f1]"
@@ -44,7 +49,10 @@ const StageThree = () => {
             Individual
           </div>
           <div
-            onClick={(e) => setOtherParty(e.target.innerHTML)}
+            onClick={(e) => {setOtherParty(e.target.innerHTML)
+              toast.error(
+                "Only Individual is supported till now 🙂"
+              );}}
             className={`${
               otherParty === "Other"
                 ? "bg-mainColor text-[#f1f1f1]"

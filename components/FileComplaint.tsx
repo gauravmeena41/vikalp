@@ -1,5 +1,6 @@
 // @ts-nocheck
 
+import toast from "react-hot-toast";
 import { useRecoilState } from "recoil";
 import { complaintDetails } from "../atoms/complaintDetails";
 import ComplaintSummary from "./ComplaintSummary";
@@ -34,11 +35,12 @@ const FileComplaint = () => {
             complaintDetail.stage > 3 ? "text-mainColor" : "text-purple-300"
           } text-4xl font-bold underline cursor-pointer`}
           onClick={() =>
-            complaintDetail.consent &&
-            setComplaintDetail({
-              ...complaintDetail,
-              stage: 4,
-            })
+            complaintDetail.consent
+              ? setComplaintDetail({
+                  ...complaintDetail,
+                  stage: 4,
+                })
+              : toast.error("Please fill all the fields")
           }
         >
           Confirm

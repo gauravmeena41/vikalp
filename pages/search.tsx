@@ -9,6 +9,7 @@ import Sidebar from "../components/Sidebar";
 import { SearchIcon } from "@heroicons/react/outline";
 import axios from "axios";
 import Router from "next/router";
+import toast, { LoaderIcon } from "react-hot-toast";
 
 enum User {
   name = "",
@@ -35,34 +36,41 @@ const search = () => {
   const [userComplaints, setUserComplaints] = useState([]);
 
   const fetchComplaint = async (complaintId: string) => {
-    if (!toggle && complaintId) {
-      let res = await axios.get(`/api/complaint/${complaintId}`);
-      res.data.data
-        ? setComplaintDetails({
-            complaintId: res.data.data.comaplaintId,
-            complainantName: res.data.data.complainantName,
-            complainantEmail: res.data.data.complainantEmail,
-            complainantPhone: res.data.data.complainantPhone,
-            respondentName: res.data.data.respondentName,
-            respondentEmail: res.data.data.respondentEmail,
-            respondentPhone: res.data.data.respondentPhone,
-            status: res.data.data.status,
-          })
-        : setComplaintDetails({
-            complaintId: "",
-            complainantName: "",
-            complainantEmail: "",
-            complainantPhone: "",
-            respondentName: "",
-            respondentEmail: "",
-            respondentPhone: "",
-            status: "",
-          });
-    } else {
-      let res = await axios.get(
-        `/api/complaint/all?userId=${"62c82dbeea4b234384d2c550"}`
-      );
-      setUserComplaints(res.data.data);
+    if(complaintId === "") return toast.error("Please enter a complaint id");
+    try {
+      if (!toggle && complaintId) {
+        let res = await axios.get(`/api/complaint/${complaintId}`);
+        res.data.data
+          ? setComplaintDetails({
+              complaintId: res.data.data.comaplaintId,
+              complainantName: res.data.data.complainantName,
+              complainantEmail: res.data.data.complainantEmail,
+              complainantPhone: res.data.data.complainantPhone,
+              respondentName: res.data.data.respondentName,
+              respondentEmail: res.data.data.respondentEmail,
+              respondentPhone: res.data.data.respondentPhone,
+              status: res.data.data.status,
+            })
+          : setComplaintDetails({
+              complaintId: "",
+              complainantName: "",
+              complainantEmail: "",
+              complainantPhone: "",
+              respondentName: "",
+              respondentEmail: "",
+              respondentPhone: "",
+              status: "",
+            });
+        res.data.data && toast.success("Complaint fetched successfully");
+      } else {
+        let res = await axios.get(
+          `/api/complaint/all?userId=${"62c82dbeea4b234384d2c550"}`
+        );
+        setUserComplaints(res.data.data);
+        res.data.data && toast.success("Complaint fetched successfully");
+      }
+    } catch (error) {
+      toast.error("Some error occur");
     }
   };
 
@@ -115,6 +123,7 @@ const search = () => {
                     className="absolute top-[0.7rem] right-4 w-8 h-8 text-secondaryColor cursor-pointer bg-white"
                     onClick={() => fetchComplaint(complaintId)}
                   />
+
                   <input
                     type="text"
                     placeholder="Case ID"
@@ -125,6 +134,9 @@ const search = () => {
                     onChange={(e) => {
                       setComplaintId(e.target.value);
                     }}
+                    onKeyUpCapture={(e) =>
+                      e.key === "Enter" && fetchComplaint(complaintId)
+                    }
                   />
                 </div>
                 {complaintDetails.complainantName && complaintId && (
