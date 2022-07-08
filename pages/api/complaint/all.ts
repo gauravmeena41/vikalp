@@ -6,7 +6,7 @@ import Complaint from "../../../models/Complaint";
 import mongoose from "mongoose";
 
 connectDb();
-export default handler = async (req: any, res: any) => {
+export default async function handler(req: any, res: any) {
   try {
     const odrProvider = await User.findOne({
       _id: mongoose.Types.ObjectId(req.query.odrProviderId),

@@ -5,7 +5,7 @@ import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import User from "../../../models/User";
 
-export default handler = async (req: any, res: any) => {
+export default async function handler(req: any, res: any) {
   connectDb();
   try {
     const { email, password, termsAndConditions } = req.body;

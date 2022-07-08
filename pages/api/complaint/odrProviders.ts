@@ -6,7 +6,7 @@ import User from "../../../models/User";
 let staticIndex = 0;
 
 connectDb();
-export default handler = async (req: any, res: any) => {
+export default async function handler(req: any, res: any) {
   try {
     const odrProviders = await User.find({ role: 1 });
 
