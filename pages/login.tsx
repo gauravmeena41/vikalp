@@ -32,6 +32,9 @@ const Login = () => {
     });
     res.data.data = jwt.decode(res.data.authToken);
 
+    res.data.status && toast.success("Logged In");
+    !res.data.status && toast.error(res.data.message);
+
     res.data.data &&
       setUser({
         id: res.data.data.id,
@@ -41,9 +44,7 @@ const Login = () => {
         role: res.data.data.role,
         termsAndConditions: res.data.data.termsAndConditions,
       });
-    res.data.data && toast.success("Logged In");
     res.data.status && Router.push("/");
-    !res.data.status && toast.error(res.data.message);
   };
 
   const signup = async (e: any) => {

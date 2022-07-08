@@ -40,6 +40,7 @@ const search = () => {
     try {
       if (!toggle && complaintId) {
         let res = await axios.get(`/api/complaint/${complaintId}`);
+        res.data.data && toast.success("Complaint fetched successfully");
         res.data.data
           ? setComplaintDetails({
               complaintId: res.data.data.comaplaintId,
@@ -61,13 +62,13 @@ const search = () => {
               respondentPhone: "",
               status: "",
             });
-        res.data.data && toast.success("Complaint fetched successfully");
+        
       } else {
         let res = await axios.get(
           `/api/complaint/all?userId=${"62c82dbeea4b234384d2c550"}`
         );
-        setUserComplaints(res.data.data);
         res.data.data && toast.success("Complaint fetched successfully");
+        setUserComplaints(res.data.data);
       }
     } catch (error) {
       toast.error("Some error occur");
