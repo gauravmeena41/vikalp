@@ -5,8 +5,9 @@ import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import User from "../../../models/User";
 
+connectDb();
+
 export default async function handler(req: any, res: any) {
-  connectDb();
   try {
     const { email, password, termsAndConditions } = req.body;
     if (!/^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/g.test(email))
@@ -43,4 +44,4 @@ export default async function handler(req: any, res: any) {
   } catch (error) {
     console.log(error);
   }
-};
+}

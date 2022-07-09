@@ -5,8 +5,9 @@ import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import User from "../../../models/User";
 
+connectDb();
+
 export default async function handler(req: any, res: any) {
-  connectDb();
   try {
     const {
       name,
@@ -26,14 +27,19 @@ export default async function handler(req: any, res: any) {
         message: "Password doesn't meet the security criteria",
       });
     else if (!/^(\+91[\-\s]?)?[0]?(91)?[789]\d{9}$/.test(phone))
-      return res.status(200).json({ status: 0, message: "Invalid phone number" });
+      return res
+        .status(200)
+        .json({ status: 0, message: "Invalid phone number" });
     else if (!termsAndConditions)
       return res.status(200).json({
         status: 0,
         message: "Please accept terms & conditions",
       });
     let user = await User.findOne({ email });
-    if (user) return res.status(200).json({ status: 0, message: "User already exists" });
+    if (user)
+      return res
+        .status(200)
+        .json({ status: 0, message: "User already exists" });
     user = await User.create({
       name,
       email,

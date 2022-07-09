@@ -1,5 +1,3 @@
-// @ts-nocheck
-
 import axios from "axios";
 
 let letters = [
@@ -46,8 +44,6 @@ export const sendMail = async () => {
     "Content-Type": "application/json",
     Accept: "application/json",
   };
-  let url;
-  url = `https://lzvd9j.api.infobip.com/email/3/send`;
   let body = {
     'from': '<gurumeena41.gm@gmail.com>',
     'to': 'gurumeena41.gm@gmail.com',
@@ -56,7 +52,7 @@ export const sendMail = async () => {
     'text': 'Mail body text',
     'intermediateReport': 'true',
 };
-  let result = await axios.post(url, body, {
+  let result = await axios.post("https://lzvd9j.api.infobip.com/email/3/send", body, {
     headers: headers,
   });
 
