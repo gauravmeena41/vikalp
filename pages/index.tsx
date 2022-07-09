@@ -27,6 +27,7 @@ const Home: NextPage = () => {
     <div>
       <Head>
         <title>Vikalp</title>
+        <link rel="icon" href="/Images/law.png" />
       </Head>
 
       <Toaster position="top-right" />

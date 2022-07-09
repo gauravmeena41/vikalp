@@ -32,6 +32,7 @@ const file_complaint = () => {
     <div>
       <Head>
         <title>Vikalp || Complaint filing</title>
+        <link rel="icon" href="/Images/law.png" />
       </Head>
       <Navbar />
       <div className="flex">

@@ -40,6 +40,7 @@ const search = () => {
     try {
       if (!toggle && complaintId) {
         let res = await axios.get(`/api/complaint/${complaintId}`);
+        !res.data.data && toast.error("Complaint Not Found !");
         res.data.data && toast.success("Complaint fetched successfully");
         res.data.data
           ? setComplaintDetails({
@@ -88,6 +89,7 @@ const search = () => {
     <div>
       <Head>
         <title>Vikalp || Search</title>
+        <link rel="icon" href="/Images/law.png" />
       </Head>
       <Navbar />
       <div className="flex">

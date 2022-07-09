@@ -87,6 +87,7 @@ const Login = () => {
     >
       <Head>
         <title>Vikalp | Login</title>
+        <link rel="icon" href="/Images/law.png" />
       </Head>
       <div className="lg:w-1/2 flex items-center justify-center ">
         <div className="bg-white lg:w-4/6 max-w-lg rounded-3xl lg:rounded-[2.5rem] relative">

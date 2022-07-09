@@ -2,6 +2,7 @@
 
 import { DocumentTextIcon } from "@heroicons/react/outline";
 import axios from "axios";
+import Router from "next/router";
 import React, { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import { useRecoilState, useRecoilValue } from "recoil";
@@ -56,6 +57,7 @@ const ComplaintSummary = () => {
         consent: false,
         status: "Pending",
       });
+      Router.push("/search");
     } catch (err) {
       toast.error("Something went wrong");
     }

@@ -20,11 +20,11 @@ export default async function handler(req: any, res: any) {
         });
       complaints = await Complaint.find({
         odrProviderId: req.query.odrProviderId,
-      });
+      }).sort({ createdAt: -1 });
     } else if (req.query.userId) {
       complaints = await Complaint.find({
         complainantId: req.query.userId,
-      });
+      }).sort({ createdAt: -1 });
     }
     res.status(200).json({
       status: 1,
