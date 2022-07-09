@@ -40,7 +40,7 @@ const search = () => {
     try {
       if (!toggle && complaintId) {
         let res = await axios.get(`/api/complaint/${complaintId}`);
-        !res.data.data && toast.error("Complaint Not Found !");
+        // !res.data.data && toast.error("Complaint Not Found !"); // Issue h isme
         res.data.data && toast.success("Complaint fetched successfully");
         res.data.data
           ? setComplaintDetails({
