@@ -62,7 +62,12 @@ export default async function handler(req: any, res: any) {
       consent,
     });
 
-    // sendMail();
+    sendMail({
+      from: "vikalp_sama@hotmail.com",
+      to: [complainantEmail, odrProvider.email],
+      subject: "Complaint Filled Successfully",
+      text: `Complaint filled successfully:\ncomplainentName: ${complaint.complainantName}\nODR Provider: ${odrProvider.name}\nComplaint Id: ${complaint.comaplaintId}`,
+    });
 
     res.status(200).json({
       status: 1,

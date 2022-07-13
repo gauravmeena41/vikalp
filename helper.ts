@@ -1,4 +1,6 @@
-import axios from "axios";
+// @ts-nocheck
+
+import nodemailer from "nodemailer";
 
 let letters = [
   "A",
@@ -37,24 +39,19 @@ export const generateUniqueId = async () => {
   }`;
 };
 
-export const sendMail = async () => {
-  const headers = {
-    Authorization:
-      "App 950a23d4c29c7be2afcb32e7e339dff2-7ce613f0-0986-4c25-8593-47f5ebfb4817",
-    "Content-Type": "application/json",
-    Accept: "application/json",
-  };
-  let body = {
-    'from': '<gurumeena41.gm@gmail.com>',
-    'to': 'gurumeena41.gm@gmail.com',
-    'subject': 'Mail subject text',
-    'html': '<h1>Html body</h1><p>Rich HTML message body.</p>',
-    'text': 'Mail body text',
-    'intermediateReport': 'true',
-};
-  let result = await axios.post("https://lzvd9j.api.infobip.com/email/3/send", body, {
-    headers: headers,
+export const sendMail = async (mailOptions) => {
+  let transporter = await nodemailer.createTransport({
+    service: "hotmail",
+    auth: {
+      user: "vikalp_sama@hotmail.com",
+      pass: process.env.MAIL_PASSWORD,
+    },
   });
-
-  console.log(result);
+  await transporter.sendMail(mailOptions, function (error, info) {
+    if (error) {
+      console.log(error);
+    } else {
+      console.log("Email sent: " + info.response);
+    }
+  });
 };
