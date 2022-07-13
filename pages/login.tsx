@@ -177,7 +177,7 @@ const Login = () => {
                     userDetails.role ? "text-mainColor" : "text-secondaryColor"
                   } text-xs font-medium uppercase`}
                 >
-                  Enterprise
+                  ODR Agency
                 </h1>
               </div>
             )}
@@ -206,8 +206,9 @@ const Login = () => {
             <div className="flex items-center justify-end">
               <button
                 className={`w-[150px] py-3 border-2 rounded-lg bg-mainColor text-lg text-white font-medium ${
-                  !userDetails.termsAndConditions &&
-                  "opacity-50 cursor-not-allowed"
+                  !userDetails.termsAndConditions
+                    ? "opacity-50 cursor-not-allowed"
+                    : "active:scale-95 transition-all duration-300 ease-in-out"
                 }`}
                 disabled={!userDetails.termsAndConditions}
                 onClick={toggle ? signup : login}

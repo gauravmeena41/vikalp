@@ -66,7 +66,7 @@ const search = () => {
         
       } else {
         let res = await axios.get(
-          `/api/complaint/all?userId=${"62c82dbeea4b234384d2c550"}`
+          `/api/complaint/all?userId=${user.id}`
         );
         res.data.data && toast.success("Complaint fetched successfully");
         setUserComplaints(res.data.data);

@@ -10,10 +10,20 @@ const StageThree = () => {
   const [complaintDetail, setComplaintDetail] =
     useRecoilState(complaintDetails);
   const [otherParty, setOtherParty] = useState("Individual");
-  const [selectedParty, setSelectedParty] = useState("");
+  const [selectedParty, setSelectedParty] = useState({
+    name: "",
+    email: "",
+    phone: "",
+  });
   const [showDropDown, setShowDropDown] = useState(false);
 
-  const parties = ["Finvu", "Onemoney", "HDFC Bank"];
+  const parties = [
+    {
+      name: "Finvu",
+      email: "finvu@gmail.com",
+      phone: "0787878787",
+    },
+  ];
 
   return (
     <div className="grid grid-cols-2 gap-10 w-full">
@@ -26,9 +36,6 @@ const StageThree = () => {
           <div
             onClick={(e) => {
               setOtherParty(e.target.innerHTML);
-              toast.error(
-                "Only Individual is supported till now 🙂"
-              );
             }}
             className={`${
               otherParty === "Enterprise"
@@ -49,10 +56,12 @@ const StageThree = () => {
             Individual
           </div>
           <div
-            onClick={(e) => {setOtherParty(e.target.innerHTML)
+            onClick={(e) => {
+              setOtherParty(e.target.innerHTML);
               toast.error(
-                "Only Individual is supported till now 🙂"
-              );}}
+                "Only Individual and Enterprises are supported till now 🙂"
+              );
+            }}
             className={`${
               otherParty === "Other"
                 ? "bg-mainColor text-[#f1f1f1]"
@@ -62,13 +71,13 @@ const StageThree = () => {
             Other
           </div>
         </div>
-        {otherParty === "Enterprises" ? ( // Bhai ye temporary hai isko bad me hatana h 😜
+        {otherParty === "Enterprise" ? ( // Bhai ye temporary hai isko bad me hatana h 😜
           <div
             className={`w-[300px] px-5 py-2 text-xl font-medium text-mainColor cursor-pointer border-2 border-purple-300 rounded-[2rem]`}
             onClick={() => setShowDropDown(!showDropDown)}
           >
             {!showDropDown &&
-              (selectedParty ? selectedParty : "Select an option")}
+              (selectedParty.name ? selectedParty.name : "Select an option")}
             {showDropDown &&
               parties.map((party, key) => (
                 <div
@@ -77,14 +86,16 @@ const StageThree = () => {
                     setSelectedParty(party);
                     setComplaintDetail({
                       ...complaintDetail,
-                      respondentName: party,
+                      respondentName: party.name,
+                      respondentEmail: party.email,
+                      respondentPhone: party.phone,
                     });
                     setShowDropDown(false);
                   }}
                   className="py-2 text-xl font-medium text-purple-300 cursor-pointer
                     hover:text-mainColor last-of-type:rounded-b-lg"
                 >
-                  {party}
+                  {party.name}
                 </div>
               ))}
           </div>

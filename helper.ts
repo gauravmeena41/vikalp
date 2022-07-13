@@ -1,5 +1,6 @@
 // @ts-nocheck
 
+import axios from "axios";
 import nodemailer from "nodemailer";
 
 let letters = [
@@ -40,18 +41,17 @@ export const generateUniqueId = async () => {
 };
 
 export const sendMail = async (mailOptions) => {
-  let transporter = await nodemailer.createTransport({
-    service: "hotmail",
-    auth: {
-      user: "vikalp_sama@hotmail.com",
-      pass: process.env.MAIL_PASSWORD,
-    },
-  });
-  await transporter.sendMail(mailOptions, function (error, info) {
-    if (error) {
-      console.log(error);
-    } else {
-      console.log("Email sent: " + info.response);
-    }
-  });
+  try {
+    let transporter = await nodemailer.createTransport({
+      service: "hotmail",
+      auth: {
+        user: "vikalp_sama@hotmail.com",
+        pass: process.env.MAIL_PASSWORD,
+      },
+    });
+    let res = await transporter.sendMail(mailOptions);
+    console.log(res);
+  } catch (error) {
+    console.log(error);
+  }
 };

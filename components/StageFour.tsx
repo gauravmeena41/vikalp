@@ -13,6 +13,8 @@ const StageFour = () => {
 
   const categories = ["Screenshot", "Affidavit", "Agreement", "Recording"];
 
+  console.log(complaintDetail);
+
   return (
     <div className="grid grid-cols-2 gap-10">
       <div className="space-y-6">
@@ -21,17 +23,31 @@ const StageFour = () => {
           Attach any file that will help the Neutral resolve your case
         </p>
         <label
-          className="w-[250px] flex p-3 rounded-full text-white font-semibold cursor-pointer border-2
+          className="w-[250px] flex p-4 rounded-full text-mainColor font-bold cursor-pointer border-2
             border-secondaryColor"
-          //   htmlFor="chooseFile" // Isse change kar dena bete bad me
-          onClick={()=>{
-            toast.error("File uploading not supported yet.");
-          }}
+          htmlFor="chooseFile"
         >
-          <PaperClipIcon className="w-7 h-7 text-mainColor mr-2" />
-          Add Image
+          {!complaintDetail.file.fileLink ? (
+            <PaperClipIcon className="w-7 h-7 text-mainColor mr-2" />
+          ) : (
+            String(complaintDetail.file.fileLink).slice(0, 25)
+          )}
         </label>
-        <input type="file" name="" id="chooseFile" className="hidden" />
+        <input
+          type="file"
+          name=""
+          id="chooseFile"
+          className="hidden"
+          onChange={(e) =>
+            setComplaintDetail({
+              ...complaintDetail,
+              file: {
+                ...complaintDetail.file,
+                fileLink: e.target.files[0].name,
+              },
+            })
+          }
+        />
         <p className="text-mainColor">What kind of Attachment is it?</p>
         <div className="flex flex-wrap">
           {categories.map((category, key) => (
@@ -41,8 +57,8 @@ const StageFour = () => {
                 setComplaintDetail({
                   ...complaintDetail,
                   file: {
-                    fileLink: "At this time we don't have any link",
-                    fileType: category,
+                    ...complaintDetail.file,
+                    fileType: e.target.innerHTML,
                   },
                 });
               }}
@@ -52,7 +68,7 @@ const StageFour = () => {
                 complaintDetail.file.fileType === category
                   ? "bg-mainColor"
                   : "bg-secondaryColor"
-              }  rounded-full text-lg text-white font-medium px-6 py-1 ml-0 m-2`}
+              }  rounded-full text-lg text-white font-medium px-6 py-1 ml-0 m-2 active:scale-95 transition-all duration-300 ease-in-out`}
             >
               {category}
             </button>
@@ -89,7 +105,7 @@ const StageFour = () => {
                   })
                 : toast.error("Please fill all the fields")
             }
-            className={`w-[220px] py-3 border-2 rounded-lg bg-mainColor text-lg text-white font-medium`}
+            className={`w-[220px] py-3 border-2 rounded-lg bg-mainColor text-lg text-white font-medium active:scale-95 transition-all duration-300 ease-in-out`}
           >
             Submit
           </button>

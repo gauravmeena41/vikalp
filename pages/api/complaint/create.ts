@@ -4,7 +4,7 @@ import connectDb from "../../../utils/connectDb";
 import User from "../../../models/User";
 import Complaint from "../../../models/Complaint";
 import mongoose from "mongoose";
-import { generateUniqueId, sendMail } from "../../../helper";
+import { generateUniqueId, sendinfobip, sendMail } from "../../../helper";
 
 connectDb();
 export default async function handler(req: any, res: any) {
@@ -64,9 +64,12 @@ export default async function handler(req: any, res: any) {
 
     sendMail({
       from: "vikalp_sama@hotmail.com",
-      to: [complainantEmail, odrProvider.email],
+      to: [complainantEmail,respondentEmail, odrProvider.email],
       subject: "Complaint Filled Successfully",
-      text: `Complaint filled successfully:\ncomplainentName: ${complaint.complainantName}\nODR Provider: ${odrProvider.name}\nComplaint Id: ${complaint.comaplaintId}`,
+      text: `Complaint filled successfully:\n
+      ${complaint.complainantName} vs ${complaint.respondentName}\n
+      ODR Provider: ${odrProvider.name}\n
+      Complaint Id: ${complaint.comaplaintId}`,
     });
 
     res.status(200).json({

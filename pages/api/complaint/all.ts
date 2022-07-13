@@ -7,6 +7,7 @@ import mongoose from "mongoose";
 
 connectDb();
 export default async function handler(req: any, res: any) {
+  console.log(req.query);
   try {
     let complaints = [];
     if (req.query.odrProviderId) {
@@ -26,6 +27,7 @@ export default async function handler(req: any, res: any) {
         complainantId: req.query.userId,
       }).sort({ createdAt: -1 });
     }
+
     res.status(200).json({
       status: 1,
       data: complaints,

@@ -59,7 +59,7 @@ const StageOne = () => {
                 complaintDetail.complaintCategory === category
                   ? "bg-mainColor"
                   : "bg-secondaryColor"
-              }  rounded-full text-lg text-white font-medium px-6 py-1 ml-0 m-2`}
+              }  rounded-full text-lg text-white font-medium px-6 py-1 ml-0 m-2 active:scale-95 transition-all duration-300 ease-in-out`}
             >
               {category}
             </button>

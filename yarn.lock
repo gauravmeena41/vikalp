@@ -1959,6 +1959,11 @@ recoil@^0.7.4:
   dependencies:
     hamt_plus "1.0.2"
 
+recoilize@^3.1.6:
+  version "3.1.6"
+  resolved "https://registry.yarnpkg.com/recoilize/-/recoilize-3.1.6.tgz#4ceba2e84979a43d3fba6c18890a181372445dd0"
+  integrity sha512-UxdkpMvnEYvnUIcIbk5NAe9tZFBkxbMaP8BUKDj1DQ9ZBYO03c8xi/jnWYSsIvRV5D3eYO8rhTzmegI86o2FBw==
+
 regenerator-runtime@^0.13.4:
   version "0.13.9"
   resolved "https://registry.npmjs.org/regenerator-runtime/-/regenerator-runtime-0.13.9.tgz"
