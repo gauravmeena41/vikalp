@@ -22,8 +22,10 @@ const Login = () => {
   });
   const [user, setUser] = useRecoilState(userState);
   const [toggle, setToggle] = useState<Boolean>(false);
+  const [loading, setLoading] = useState<Boolean>(false);
 
   const login = async (e: any) => {
+    setLoading(true);
     e.preventDefault();
     let res = await axios.post("/api/auth/login", {
       email: userDetails.email,
@@ -44,10 +46,12 @@ const Login = () => {
         role: res.data.data.role,
         termsAndConditions: res.data.data.termsAndConditions,
       });
+    setLoading(false);
     res.data.status && Router.push("/");
   };
 
   const signup = async (e: any) => {
+    setLoading(true);
     console.log(userDetails);
     e.preventDefault();
     let res = await axios.post("/api/auth/signup", {
@@ -70,6 +74,7 @@ const Login = () => {
       termsAndConditions: false,
       role: false,
     });
+    setLoading(false);
   };
 
   useEffect(() => {
@@ -209,11 +214,17 @@ const Login = () => {
                   !userDetails.termsAndConditions
                     ? "opacity-50 cursor-not-allowed"
                     : "active:scale-95 transition-all duration-300 ease-in-out"
-                }`}
+                } flex items-center justify-center`}
                 disabled={!userDetails.termsAndConditions}
                 onClick={toggle ? signup : login}
               >
-                {toggle ? "Sign Up" : "Log In"}
+                {loading ? (
+                  <Image src="/Images/ellipsis.svg" width={30} height={30} />
+                ) : toggle ? (
+                  "Signup"
+                ) : (
+                  "Login"
+                )}
               </button>
             </div>
           </form>
