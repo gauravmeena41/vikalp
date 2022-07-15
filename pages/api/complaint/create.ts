@@ -85,17 +85,17 @@ export default async function handler(req: any, res: any) {
         to: [respondentEmail],
         subject: "Complaint Filled against You",
         text: `A complaint has been filled aginst you by ${complaint.complainantName}\n
-      Dispute will be resolved by the ODR Provider: ${odrProvider.name}\n
-      Complaint Id of the same is ${complaint.comaplaintId}`,
+               Dispute will be resolved by the ODR Provider: ${odrProvider.name}\n
+               Complaint Id of the same is ${complaint.comaplaintId}`,
       });
       await sendMail({
         from: "vikalp_sahamati@hotmail.com",
         to: ["arpit.ayushman98@gmail.com"],
         subject: "Received a new Complaint on Vikalp",
         text: `You have received a new complaint on vikalp Platform. Please checkout the details listed below:\n
-      ${complaint.complainantName} vs ${complaint.respondentName}\n
-      Complaint Id: ${complaint.comaplaintId}\n
-      Happy Resolving`,
+              ${complaint.complainantName} vs ${complaint.respondentName}\n
+                Complaint Id: ${complaint.comaplaintId}\n
+                Happy Resolving`,
       });
       console.log("email sent successfully");
 
