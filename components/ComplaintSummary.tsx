@@ -98,7 +98,7 @@ const ComplaintSummary = () => {
               Documents
             </h1>
             <div className="h-[250px] text-gray-200 border-2 border-secondaryColor rounded-[2rem] flex flex-col items-center justify-center
-            bg-secondaryColor">
+            bg-gray-300">
               <DocumentTextIcon className="w-full h-full bg-white rounded-t-[1.8rem]" />
               <h1 className="text-center text-gray-700 font-semibold p-2">
                 {complaintDetail.file.fileLink}

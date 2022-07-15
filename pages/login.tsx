@@ -64,16 +64,17 @@ const Login = () => {
     });
     res.data.status && toast.success("Sign up Successful");
     !res.data.status && toast.error(res.data.message);
-    res.data.status && setToggle(false);
-    setUserDetails({
-      name: "",
-      email: "",
-      password: "",
-      confirmPassword: "",
-      phoneNumber: "",
-      termsAndConditions: false,
-      role: false,
-    });
+    res.data.status &&
+      setToggle(false) &&
+      setUserDetails({
+        name: "",
+        email: "",
+        password: "",
+        confirmPassword: "",
+        phoneNumber: "",
+        termsAndConditions: false,
+        role: false,
+      });
     setLoading(false);
   };
 
