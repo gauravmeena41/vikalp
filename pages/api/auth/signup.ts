@@ -62,11 +62,12 @@ export default async function handler(req: any, res: any) {
     );
 
     sendMail({
-      from: "vikalp_sama@hotmail.com",
+      from: "vikalp_sahamati@hotmail.com",
       to: [email],
       subject: `Welcome to Vikalp`,
       text: `Welcome ${name} to Vikalp,\n
-      your account has been created successfully.`,
+             your account has been created successfully.
+             Happy Resolving`,
     });
 
     res.status(200).json({

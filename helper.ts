@@ -45,7 +45,7 @@ export const sendMail = async (mailOptions) => {
     let transporter = await nodemailer.createTransport({
       service: "hotmail",
       auth: {
-        user: "vikalp_sama@hotmail.com",
+        user: "vikalp_sahamati@hotmail.com",
         pass: process.env.MAIL_PASSWORD,
       },
     });
