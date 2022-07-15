@@ -25,12 +25,9 @@ const search = () => {
   const [complaintId, setComplaintId] = useState("");
   const [complaintDetails, setComplaintDetails] = useState({
     complaintId: "",
-    complainantName: "",
     complainantEmail: "",
-    complainantPhone: "",
-    respondentName: "",
     respondentEmail: "",
-    respondentPhone: "",
+    Reason:"",
     status: "",
   });
   const [userComplaints, setUserComplaints] = useState([]);
@@ -40,35 +37,27 @@ const search = () => {
     try {
       if (!toggle && complaintId) {
         let res = await axios.get(`/api/complaint/${complaintId}`);
-        // !res.data.data && toast.error("Complaint Not Found !"); // Issue h isme
-        res.data.data && toast.success("Complaint fetched successfully");
+        // !res.data.data && toast.error("Complaint Not Found !"); // Issue h isme error aayega
         res.data.data
           ? setComplaintDetails({
               complaintId: res.data.data.comaplaintId,
-              complainantName: res.data.data.complainantName,
               complainantEmail: res.data.data.complainantEmail,
-              complainantPhone: res.data.data.complainantPhone,
-              respondentName: res.data.data.respondentName,
               respondentEmail: res.data.data.respondentEmail,
-              respondentPhone: res.data.data.respondentPhone,
+              Reason: res.data.data.complaintDescription,
               status: res.data.data.status,
             })
           : setComplaintDetails({
-              complaintId: "",
-              complainantName: "",
-              complainantEmail: "",
-              complainantPhone: "",
-              respondentName: "",
-              respondentEmail: "",
-              respondentPhone: "",
-              status: "",
+            complaintId: "",
+            complainantEmail: "",
+            respondentEmail: "",
+            Reason:"",
+            status: "",
             });
-        
+        console.log(res.data.data);
       } else {
         let res = await axios.get(
           `/api/complaint/all?userId=${user.id}`
         );
-        res.data.data && toast.success("Complaint fetched successfully");
         setUserComplaints(res.data.data);
       }
     } catch (error) {
@@ -142,8 +131,8 @@ const search = () => {
                     }
                   />
                 </div>
-                {complaintDetails.complainantName && complaintId && (
-                  <div className="grid grid-cols-8 w-[calc(100vw-80px)] border-y-2 border-secondaryColor animate-fade">
+                {complaintDetails.status && complaintId && (
+                  <div className="grid grid-cols-5 w-[calc(100vw-80px)] border-y-2 border-secondaryColor animate-fade">
                     {Object.entries(complaintDetails).map(([key, value]) => (
                       <div className="border-r-2 border-secondaryColor">
                         <div
@@ -162,7 +151,7 @@ const search = () => {
               </div>
             ) : (
               <div>
-                <div className="grid grid-cols-8 w-[calc(100vw-80px)] border-y-2 border-secondaryColor animate-fade uppercase">
+                <div className="grid grid-cols-5 w-[calc(100vw-80px)] border-y-2 border-secondaryColor animate-fade uppercase">
                   <div>
                     <div className="p-4 border-r-2 border-secondary flex items-center justify-center font-semibold text-mainColor">
                       complaintId
@@ -170,24 +159,10 @@ const search = () => {
                   </div>
                   <div>
                     <div className="p-4 border-r-2 border-secondary flex items-center justify-center font-semibold text-mainColor">
-                      complainantname
-                    </div>
-                  </div>
-                  <div>
-                    <div className="p-4 border-r-2 border-secondary flex items-center justify-center font-semibold text-mainColor">
                       complainantemail
                     </div>
                   </div>
-                  <div>
-                    <div className="p-4 border-r-2 border-secondary flex items-center justify-center font-semibold text-mainColor">
-                      complainantphone
-                    </div>
-                  </div>
-                  <div>
-                    <div className="p-4 border-r-2 border-secondary flex items-center justify-center font-semibold text-mainColor">
-                      respondentname
-                    </div>
-                  </div>
+                 
                   <div>
                     <div className="p-4 border-r-2 border-secondary flex items-center justify-center font-semibold text-mainColor">
                       respondentemail
@@ -195,7 +170,7 @@ const search = () => {
                   </div>
                   <div>
                     <div className="p-4 border-r-2 border-secondary flex items-center justify-center font-semibold text-mainColor">
-                      respondentphone
+                      Reason
                     </div>
                   </div>
                   <div>
@@ -205,32 +180,19 @@ const search = () => {
                   </div>
                 </div>
                 {userComplaints.map((complaint) => (
-                  <div className="grid grid-cols-8 w-[calc(100vw-80px)] animate-fade">
+                  <div className="grid grid-cols-5 w-[calc(100vw-80px)] animate-fade">
                     <div>
                       <div className="p-4 text-xs flex items-center justify-center font-semibold text-gray-600">
                         {complaint.comaplaintId}
                       </div>
                     </div>
-                    <div>
-                      <div className="p-4 text-xs flex items-center justify-center font-semibold text-gray-600">
-                        {complaint.complainantName}
-                      </div>
-                    </div>
+                   
                     <div>
                       <div className="p-4 text-xs flex items-center justify-center font-semibold text-gray-600">
                         {complaint.complainantEmail}
                       </div>
                     </div>
-                    <div>
-                      <div className="p-4 text-xs flex items-center justify-center font-semibold text-gray-600">
-                        {complaint.complainantPhone}
-                      </div>
-                    </div>
-                    <div>
-                      <div className="p-4 text-xs flex items-center justify-center font-semibold text-gray-600">
-                        {complaint.respondentName}
-                      </div>
-                    </div>
+                   
                     <div>
                       <div className="p-4 text-xs flex items-center justify-center font-semibold text-gray-600">
                         {complaint.respondentEmail}
@@ -238,7 +200,7 @@ const search = () => {
                     </div>
                     <div>
                       <div className="p-4 text-xs flex items-center justify-center font-semibold text-gray-600">
-                        {complaint.respondentPhone}
+                        {complaint.complaintDescription.slice(0, 40)}
                       </div>
                     </div>
                     <div>
@@ -246,7 +208,6 @@ const search = () => {
                         {complaint.status}
                       </div>
                     </div>
-                    {console.log(complaint)}
                   </div>
                 ))}
               </div>
