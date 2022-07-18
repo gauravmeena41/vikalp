@@ -48,8 +48,10 @@ export const sendMail = async (mailOptions) => {
         pass: process.env.MAIL_PASSWORD,
       },
     });
-    let res = await transporter.sendMail(mailOptions);
-    console.log(res);
+    mailOptions.map(async(mailOption) => {
+      let res = await transporter.sendMail(mailOption);
+      console.log(res);
+    });
   } catch (error) {
     console.log(error);
   }
