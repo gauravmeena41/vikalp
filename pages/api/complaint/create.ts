@@ -73,7 +73,7 @@ export default async function handler(req: any, res: any) {
     // });
 
     // send email to complainant
-    await sendMail({
+    sendMail({
       from: "vikalp_sahamati@hotmail.com",
       to: [complainantEmail],
       subject: "Complaint Filled Successfully",
@@ -84,7 +84,7 @@ export default async function handler(req: any, res: any) {
     });
 
     // send email to respondent
-    await sendMail({
+    sendMail({
       from: "vikalp_sahamati@hotmail.com",
       to: [respondentEmail],
       subject: "Complaint Filled against You",
@@ -94,7 +94,7 @@ export default async function handler(req: any, res: any) {
     });
 
     // send email to ODR Provider
-    await sendMail({
+    sendMail({
       from: "vikalp_sahamati@hotmail.com",
       to: [odrProvider.email],
       subject: "Received a new Complaint on Vikalp",
