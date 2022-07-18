@@ -13,6 +13,7 @@ const ComplaintSummary = () => {
   const [complaintDetail, setComplaintDetail] =
     useRecoilState(complaintDetails);
   const user = useRecoilValue(userState);
+  const [loading, setLoading] = useState(false);
   const [odrProvider, setOdrProvider] = useState({
     id: "",
     name: "",
@@ -21,6 +22,7 @@ const ComplaintSummary = () => {
   });
 
   const fileComplaint = async () => {
+    setLoading(true);
     try {
       await axios.post("api/complaint/create", {
         odrProviderId: odrProvider.id,
@@ -57,9 +59,11 @@ const ComplaintSummary = () => {
         consent: false,
         status: "Pending",
       });
+      setLoading(false);
       Router.push("/search");
     } catch (err) {
       toast.error("Something went wrong");
+      setLoading(false);
     }
   };
 
@@ -97,8 +101,10 @@ const ComplaintSummary = () => {
             <h1 className="bg-mainColor px-5 py-2 my-2 w-fit rounded-[2rem] text-[#f1f1f1] font-medium">
               Documents
             </h1>
-            <div className="h-[250px] text-gray-200 border-2 border-secondaryColor rounded-[2rem] flex flex-col items-center justify-center
-            bg-gray-300">
+            <div
+              className="h-[250px] text-gray-200 border-2 border-secondaryColor rounded-[2rem] flex flex-col items-center justify-center
+            bg-gray-300"
+            >
               <DocumentTextIcon className="w-full h-full bg-white rounded-t-[1.8rem]" />
               <h1 className="text-center text-gray-700 font-semibold p-2">
                 {complaintDetail.file.fileLink}
@@ -131,12 +137,17 @@ const ComplaintSummary = () => {
           </div>
         </div>
         <div className="flex justify-center">
-          <button
-            className="bg-green-400 text-white font-medium text-2xl px-14 py-3 rounded-lg active:scale-95 transition-all duration-300 ease-in-out"
-            onClick={fileComplaint}
+          <div
+            className={`text-white font-medium text-2xl px-14 py-3 rounded-lg
+            transition-all duration-300 ease-in-out ${
+              loading ? "cursor-not-allowed bg-secondaryColor" : "cursor-pointer active:scale-95 bg-green-400"
+            }`}
+            onClick={() => {
+              !loading && fileComplaint();
+            }}
           >
-            Confirm Case Filing
-          </button>
+            {loading ? "Please wait..." : "Confirm Case Filing"}
+          </div>
         </div>
       </div>
     </div>

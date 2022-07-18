@@ -1,6 +1,5 @@
 // @ts-nocheck
 
-import axios from "axios";
 import nodemailer from "nodemailer";
 
 let letters = [

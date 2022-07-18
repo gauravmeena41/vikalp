@@ -9,7 +9,7 @@ import { complaintDetails } from "../atoms/complaintDetails";
 const StageThree = () => {
   const [complaintDetail, setComplaintDetail] =
     useRecoilState(complaintDetails);
-  const [otherParty, setOtherParty] = useState("Individual");
+  const [otherParty, setOtherParty] = useState("Enterprise");
   const [selectedParty, setSelectedParty] = useState({
     name: "",
     email: "",
@@ -34,6 +34,16 @@ const StageThree = () => {
         </p>
         <div className="grid grid-cols-3">
           <div
+            onClick={(e) => setOtherParty(e.target.innerHTML)}
+            className={`${
+              otherParty === "Individual"
+                ? "bg-mainColor text-[#f1f1f1]"
+                : "text-gray-700"
+            } flex justify-center font-medium cursor-pointer py-2 border-2 rounded-l-[2rem] border-mainColor`}
+          >
+            Individual
+          </div>
+          <div
             onClick={(e) => {
               setOtherParty(e.target.innerHTML);
             }}
@@ -41,19 +51,9 @@ const StageThree = () => {
               otherParty === "Enterprise"
                 ? "bg-mainColor text-[#f1f1f1]"
                 : "text-gray-700"
-            } flex justify-center font-medium cursor-pointer py-2 border-2 border-r-0 rounded-l-lg border-mainColor`}
+            } flex justify-center font-medium cursor-pointer py-2 border-2 border-l-0 border-mainColor`}
           >
             Enterprise
-          </div>
-          <div
-            onClick={(e) => setOtherParty(e.target.innerHTML)}
-            className={`${
-              otherParty === "Individual"
-                ? "bg-mainColor text-[#f1f1f1]"
-                : "text-gray-700"
-            } flex justify-center font-medium cursor-pointer py-2 border-2 border-mainColor`}
-          >
-            Individual
           </div>
           <div
             onClick={(e) => {
@@ -66,12 +66,12 @@ const StageThree = () => {
               otherParty === "Other"
                 ? "bg-mainColor text-[#f1f1f1]"
                 : "text-gray-700"
-            } flex justify-center font-medium cursor-pointer py-2 border-2 border-l-0 rounded-r-lg border-mainColor`}
+            } flex justify-center font-medium cursor-pointer py-2 border-2 border-l-0 rounded-r-[2rem] border-mainColor`}
           >
             Other
           </div>
         </div>
-        {otherParty === "Enterprise" ? ( // Bhai ye temporary hai isko bad me hatana h 😜
+        {otherParty === "Enterprise" ? (
           <div
             className={`w-[300px] px-5 py-2 text-xl font-medium text-mainColor cursor-pointer border-2 border-purple-300 rounded-[2rem]`}
             onClick={() => setShowDropDown(!showDropDown)}

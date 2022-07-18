@@ -13,8 +13,6 @@ const StageFour = () => {
 
   const categories = ["Screenshot", "Affidavit", "Agreement", "Recording"];
 
-  console.log(complaintDetail);
-
   return (
     <div className="grid grid-cols-2 gap-10">
       <div className="space-y-6">
