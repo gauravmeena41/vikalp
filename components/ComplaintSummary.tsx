@@ -140,10 +140,12 @@ const ComplaintSummary = () => {
           <div
             className={`text-white font-medium text-2xl px-14 py-3 rounded-lg
             transition-all duration-300 ease-in-out ${
-              loading ? "cursor-not-allowed bg-secondaryColor" : "cursor-pointer active:scale-95 bg-green-400"
+              loading
+                ? "cursor-not-allowed bg-secondaryColor"
+                : "cursor-pointer active:scale-95 bg-green-400"
             }`}
             onClick={() => {
-              !loading && fileComplaint();
+              !loading && odrProvider.id && fileComplaint();
             }}
           >
             {loading ? "Please wait..." : "Confirm Case Filing"}
