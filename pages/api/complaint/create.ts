@@ -71,6 +71,8 @@ export default async function handler(req: any, res: any) {
     //   ODR Provider: ${odrProvider.name}\n
     //   Complaint Id: ${complaint.comaplaintId}`,
     // });
+
+    // send email to complainant
     await sendMail({
       from: "vikalp_sahamati@hotmail.com",
       to: [complainantEmail],
@@ -80,6 +82,8 @@ export default async function handler(req: any, res: any) {
       ODR Provider: ${odrProvider.name}\n
       Complaint Id: ${complaint.comaplaintId}`,
     });
+
+    // send email to respondent
     await sendMail({
       from: "vikalp_sahamati@hotmail.com",
       to: [respondentEmail],
@@ -88,9 +92,11 @@ export default async function handler(req: any, res: any) {
                Dispute will be resolved by the ODR Provider: ${odrProvider.name}\n
                Complaint Id of the same is ${complaint.comaplaintId}`,
     });
+
+    // send email to ODR Provider
     await sendMail({
       from: "vikalp_sahamati@hotmail.com",
-      to: ["arpit.ayushman98@gmail.com"],
+      to: [odrProvider.email],
       subject: "Received a new Complaint on Vikalp",
       text: `You have received a new complaint on vikalp Platform. Please checkout the details listed below:\n
               ${complaint.complainantName} vs ${complaint.respondentName}\n
