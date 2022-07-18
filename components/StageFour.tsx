@@ -96,7 +96,9 @@ const StageFour = () => {
         <div className="flex items-center">
           <button
             onClick={() =>
-              complaintDetail.file.fileType && complaintDetail.consent
+              complaintDetail.file.fileType &&
+              complaintDetail.consent &&
+              complaintDetail.file.fileLink
                 ? setComplaintDetail({
                     ...complaintDetail,
                     stage: complaintDetail.stage + 1,

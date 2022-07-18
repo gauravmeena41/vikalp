@@ -67,18 +67,19 @@ const ComplaintSummary = () => {
     }
   };
 
-  useEffect(() => {
-    axios.get("api/complaint/odrProviders").then((res) => {
+  const fetchOdrProvider = async () => {
+    await axios.get("api/complaint/odrProviders").then((res) =>
       setOdrProvider({
         id: res.data.selectedODRProvider._id,
         name: res.data.selectedODRProvider.name,
         email: res.data.selectedODRProvider.email,
         phone: res.data.selectedODRProvider.phone,
-      });
-    });
+      })
+    );
+  };
+  useEffect(() => {
+    fetchOdrProvider();
   }, []);
-
-  console.log(odrProvider);
 
   return (
     <div className="grid grid-cols-2 gap-10 w-full">
