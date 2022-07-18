@@ -63,7 +63,7 @@ export default async function handler(req: any, res: any) {
     });
 
     // sendMail({
-    //   from: "vikalp_sahamati@hotmail.com",
+    //   from: process.env.MAIL_EMAIL_ID,
     //   to: [complainantEmail,respondentEmail, odrProvider.email],
     //   subject: "Complaint Filled Successfully",
     //   text: `Complaint filled successfully:\n
@@ -74,7 +74,7 @@ export default async function handler(req: any, res: any) {
 
     // send email to complainant
     sendMail({
-      from: "vikalp_sahamati@hotmail.com",
+      from: process.env.MAIL_EMAIL_ID,
       to: [complainantEmail],
       subject: "Complaint Filled Successfully",
       text: `Complaint filled successfully:\n
@@ -85,7 +85,7 @@ export default async function handler(req: any, res: any) {
 
     // send email to respondent
     sendMail({
-      from: "vikalp_sahamati@hotmail.com",
+      from: process.env.MAIL_EMAIL_ID,
       to: [respondentEmail],
       subject: "Complaint Filled against You",
       text: `A complaint has been filled aginst you by ${complaint.complainantName}\n
@@ -95,7 +95,7 @@ export default async function handler(req: any, res: any) {
 
     // send email to ODR Provider
     sendMail({
-      from: "vikalp_sahamati@hotmail.com",
+      from: process.env.MAIL_EMAIL_ID,
       to: [odrProvider.email],
       subject: "Received a new Complaint on Vikalp",
       text: `You have received a new complaint on vikalp Platform. Please checkout the details listed below:\n

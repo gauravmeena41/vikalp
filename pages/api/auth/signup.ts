@@ -62,7 +62,7 @@ export default async function handler(req: any, res: any) {
     );
 
     sendMail({
-      from: "vikalp_sahamati@hotmail.com",
+      from: process.env.MAIL_EMAIL_ID,
       to: [email],
       subject: `Welcome to Vikalp`,
       text: `Welcome ${name} to Vikalp,\n
