@@ -39,9 +39,10 @@ export const generateUniqueId = async () => {
   }`;
 };
 
-export const sendMail = async (mailObj) => {
+export const sendMail = async (messageArr) => {
   try {
     let transporter = await nodemailer.createTransport({
+      pool: true,
       service: "hotmail",
       auth: {
         user: process.env.MAIL_EMAIL_ID,
@@ -49,7 +50,7 @@ export const sendMail = async (mailObj) => {
       },
     });
 
-    let res = await transporter.sendMail(mailObj);
+    let res = transporter.sendMail(messageArr.shift());
     console.log(res);
   } catch (error) {
     console.log(error);

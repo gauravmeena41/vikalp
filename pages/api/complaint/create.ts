@@ -109,9 +109,7 @@ export default async function handler(req: any, res: any) {
       },
     ];
 
-    messageArr.map(async (message) => {
-      await sendMail(message);
-    });
+    await sendMail(messageArr);
   } catch (error) {
     console.error(error.message);
     res.status(500).json({
