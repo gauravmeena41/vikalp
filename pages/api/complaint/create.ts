@@ -113,6 +113,8 @@ export default async function handler(req: any, res: any) {
       let mailRes = await transporter.sendMail(messageArr.shift());
       console.log(mailRes);
     }
+
+    console.log("Mail sent");
   } catch (error) {
     console.error(error.message);
     res.status(500).json({
