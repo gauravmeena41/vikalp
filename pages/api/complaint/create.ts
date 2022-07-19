@@ -86,7 +86,7 @@ export default async function handler(req: any, res: any) {
       Complaint Id: ${complaint.comaplaintId}`,
     });
     await sendMail({
-      from: process,
+      from: process.env.MAIL_EMAIL_ID,
       to: respondentEmail,
       subject: "Complaint Filled against You",
       text: `A complaint has been filled aginst you by ${complaint.complainantName}\n
@@ -94,7 +94,7 @@ export default async function handler(req: any, res: any) {
                Complaint Id of the same is ${complaint.comaplaintId}`,
     });
     await sendMail({
-      from: process,
+      from: process.env.MAIL_EMAIL_ID,
       to: odrProvider.email,
       subject: "Received a new Complaint on Vikalp",
       text: `You have received a new complaint on vikalp Platform. Please checkout the details listed below:\n
