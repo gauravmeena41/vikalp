@@ -39,7 +39,7 @@ export const generateUniqueId = async () => {
   }`;
 };
 
-export const sendMail = async (mailOptions) => {
+export const sendMail = async (mailObj) => {
   try {
     let transporter = await nodemailer.createTransport({
       service: "hotmail",
@@ -48,10 +48,9 @@ export const sendMail = async (mailOptions) => {
         pass: process.env.MAIL_PASSWORD,
       },
     });
-    mailOptions.map(async(mailOption) => {
-      let res = await transporter.sendMail(mailOption);
-      console.log(res);
-    });
+
+    let res = await transporter.sendMail(mailObj);
+    console.log(res);
   } catch (error) {
     console.log(error);
   }

@@ -72,7 +72,12 @@ export default async function handler(req: any, res: any) {
     //   Complaint Id: ${complaint.comaplaintId}`,
     // });
 
-    sendMail([
+    res.status(200).json({
+      status: 1,
+      data: complaint,
+    });
+
+    let messageArr = [
       // send email to complainant
       {
         from: process.env.MAIL_EMAIL_ID,
@@ -102,11 +107,10 @@ export default async function handler(req: any, res: any) {
                   Complaint Id: ${complaint.comaplaintId}\n
                   Happy Resolving`,
       },
-    ]);
+    ];
 
-    res.status(200).json({
-      status: 1,
-      data: complaint,
+    messageArr.map(async (message) => {
+      await sendMail(message);
     });
   } catch (error) {
     console.error(error.message);
