@@ -50,7 +50,7 @@ export const sendMail = async (messageArr) => {
       },
     });
 
-    let res = transporter.sendMail(messageArr.shift());
+    let res = await transporter.sendMail(messageArr.shift());
     console.log(res);
   } catch (error) {
     console.log(error);

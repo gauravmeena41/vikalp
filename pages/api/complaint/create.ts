@@ -62,16 +62,6 @@ export default async function handler(req: any, res: any) {
       consent,
     });
 
-    // sendMail({
-    //   from: process.env.MAIL_EMAIL_ID,
-    //   to: [complainantEmail,respondentEmail, odrProvider.email],
-    //   subject: "Complaint Filled Successfully",
-    //   text: `Complaint filled successfully:\n
-    //   ${complaint.complainantName} vs ${complaint.respondentName}\n
-    //   ODR Provider: ${odrProvider.name}\n
-    //   Complaint Id: ${complaint.comaplaintId}`,
-    // });
-
     res.status(200).json({
       status: 1,
       data: complaint,
