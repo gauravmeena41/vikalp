@@ -109,8 +109,10 @@ export default async function handler(req: any, res: any) {
       },
     });
 
-    let mailRes = await transporter.sendMail(messageArr.shift());
-    console.log(mailRes);
+    while (messageArr.length) {
+      let mailRes = await transporter.sendMail(messageArr.shift());
+      console.log(mailRes);
+    }
   } catch (error) {
     console.error(error.message);
     res.status(500).json({
