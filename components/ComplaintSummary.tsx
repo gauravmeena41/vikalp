@@ -60,7 +60,7 @@ const ComplaintSummary = () => {
         status: "Pending",
       });
       setLoading(false);
-      // Router.push("/search");
+      Router.push("/search");
     } catch (err) {
       toast.error("Something went wrong");
       setLoading(false);
