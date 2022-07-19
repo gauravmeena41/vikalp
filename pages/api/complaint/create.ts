@@ -5,6 +5,7 @@ import User from "../../../models/User";
 import Complaint from "../../../models/Complaint";
 import mongoose from "mongoose";
 import { generateUniqueId, sendinfobip, sendMail } from "../../../helper";
+import nodemailer from "nodemailer";
 
 connectDb();
 export default async function handler(req: any, res: any) {
@@ -99,7 +100,17 @@ export default async function handler(req: any, res: any) {
       },
     ];
 
-    await sendMail(messageArr);
+    let transporter = await nodemailer.createTransport({
+      pool: true,
+      service: "hotmail",
+      auth: {
+        user: process.env.MAIL_EMAIL_ID,
+        pass: process.env.MAIL_PASSWORD,
+      },
+    });
+
+    let mailRes = await transporter.sendMail(messageArr.shift());
+    console.log(mailRes);
   } catch (error) {
     console.error(error.message);
     res.status(500).json({
