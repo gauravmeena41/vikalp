@@ -62,11 +62,6 @@ export default async function handler(req: any, res: any) {
       consent,
     });
 
-    res.status(200).json({
-      status: 1,
-      data: complaint,
-    });
-
     // sendMail({
     //   from: process,
     //   to: [complainantEmail,respondentEmail, odrProvider.email],
@@ -101,6 +96,11 @@ export default async function handler(req: any, res: any) {
               ${complaint.complainantName} vs ${complaint.respondentName}\n
                 Complaint Id: ${complaint.comaplaintId}\n
                 Happy Resolving`,
+    });
+
+    res.status(200).json({
+      status: 1,
+      data: complaint,
     });
   } catch (error) {
     console.error(error.message);
