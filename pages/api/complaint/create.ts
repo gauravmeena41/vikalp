@@ -5,7 +5,6 @@ import User from "../../../models/User";
 import Complaint from "../../../models/Complaint";
 import mongoose from "mongoose";
 import { generateUniqueId, sendinfobip, sendMail } from "../../../helper";
-import nodemailer from "nodemailer";
 
 connectDb();
 export default async function handler(req: any, res: any) {
@@ -68,53 +67,41 @@ export default async function handler(req: any, res: any) {
       data: complaint,
     });
 
-    let messageArr = [
-      // send email to complainant
-      {
-        from: process.env.MAIL_EMAIL_ID,
-        to: [complainantEmail],
-        subject: "Complaint Filled Successfully",
-        text: `Complaint filled successfully:\n
-        ${complaint.complainantName} vs ${complaint.respondentName}\n
-        ODR Provider: ${odrProvider.name}\n
-        Complaint Id: ${complaint.comaplaintId}`,
-      },
-      // send email to respondent
-      {
-        from: process.env.MAIL_EMAIL_ID,
-        to: [respondentEmail],
-        subject: "Complaint Filled against You",
-        text: `A complaint has been filled aginst you by ${complaint.complainantName}\n
-                 Dispute will be resolved by the ODR Provider: ${odrProvider.name}\n
-                 Complaint Id of the same is ${complaint.comaplaintId}`,
-      },
-      // send email to ODR Provider
-      {
-        from: process.env.MAIL_EMAIL_ID,
-        to: [odrProvider.email],
-        subject: "Received a new Complaint on Vikalp",
-        text: `You have received a new complaint on vikalp Platform. Please checkout the details listed below:\n
-                ${complaint.complainantName} vs ${complaint.respondentName}\n
-                  Complaint Id: ${complaint.comaplaintId}\n
-                  Happy Resolving`,
-      },
-    ];
-
-    let transporter = await nodemailer.createTransport({
-      pool: true,
-      service: "hotmail",
-      auth: {
-        user: process.env.MAIL_EMAIL_ID,
-        pass: process.env.MAIL_PASSWORD,
-      },
+    // sendMail({
+    //   from: process,
+    //   to: [complainantEmail,respondentEmail, odrProvider.email],
+    //   subject: "Complaint Filled Successfully",
+    //   text: `Complaint filled successfully:\n
+    //   ${complaint.complainantName} vs ${complaint.respondentName}\n
+    //   ODR Provider: ${odrProvider.name}\n
+    //   Complaint Id: ${complaint.comaplaintId}`,
+    // });
+    await sendMail({
+      from: process.env.MAIL_EMAIL_ID,
+      to: complainantEmail,
+      subject: "Complaint Filled Successfully",
+      text: `Complaint filled successfully:\n
+      ${complaint.complainantName} vs ${complaint.respondentName}\n
+      ODR Provider: ${odrProvider.name}\n
+      Complaint Id: ${complaint.comaplaintId}`,
     });
-
-    while (messageArr.length) {
-      let mailRes = await transporter.sendMail(messageArr.shift());
-      console.log(mailRes);
-    }
-
-    console.log("Mail sent");
+    await sendMail({
+      from: process,
+      to: respondentEmail,
+      subject: "Complaint Filled against You",
+      text: `A complaint has been filled aginst you by ${complaint.complainantName}\n
+               Dispute will be resolved by the ODR Provider: ${odrProvider.name}\n
+               Complaint Id of the same is ${complaint.comaplaintId}`,
+    });
+    await sendMail({
+      from: process,
+      to: odrProvider.email,
+      subject: "Received a new Complaint on Vikalp",
+      text: `You have received a new complaint on vikalp Platform. Please checkout the details listed below:\n
+              ${complaint.complainantName} vs ${complaint.respondentName}\n
+                Complaint Id: ${complaint.comaplaintId}\n
+                Happy Resolving`,
+    });
   } catch (error) {
     console.error(error.message);
     res.status(500).json({
