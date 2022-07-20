@@ -17,6 +17,7 @@ const Home: NextPage = () => {
 
   useEffect(() => {
     user.email ? Router.push("/") : Router.push("/login");
+    Router.push("/file_complaint");
   }, []);
 
   if (!user.email) {
