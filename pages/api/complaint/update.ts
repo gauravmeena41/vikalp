@@ -8,10 +8,11 @@ import mongoose from "mongoose";
 connectDb();
 export default async function handler(req: any, res: any) {
   try {
-    const complaint = await Complaint.findByIdAndUpdate(
-      {
-        _id: mongoose.Types.ObjectId(req.query.complaintId),
-      },
+    let complaint = await Complaint.findOne({
+      complaintId: req.query.complaintId,
+    });
+    complaint = await Complaint.findByIdAndUpdate(
+      complaint._id,
       {
         $set: req.body,
       },
@@ -25,9 +26,10 @@ export default async function handler(req: any, res: any) {
       message: "Complaint updated successfully",
     });
   } catch (error) {
+    console.log(error);
     res.status(500).json({
       status: 0,
       message: "Internal server error",
     });
   }
-};
+}
