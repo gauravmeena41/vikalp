@@ -16,32 +16,30 @@ module.exports = {
         "base-shadow": "rgba(112, 144, 176, 0.32) 0px 4px 4px -2px",
       },
       keyframes: {
-        "slide-left": {
+        "slide-down": {
           "0%": {
             opacity: 0,
-            display:"hidden",
-            transform: "translateX(0%)",
+            transform: "translateY(-10%)",
           },
           "100%": {
             opacity: 1,
-            display:"inline-block",
-            transform: "translateX(-10%)",
+            transform: "translateY(0%)",
           },
         },
-        "fade": {
+        fade: {
           "0%": {
             opacity: 0,
-            transform: "scale(0.9)",
+            transform: "translateX(-10%)",
           },
           "100%": {
             opacity: 1,
-            transform: "scale(1)",
+            transform: "translateX(0%)",
           },
         },
       },
       animation: {
-        "slide-left": "slide-left 0.5s forwards ease-in-out",
-        "fade": "fade 0.3s forwards ease-in-out",
+        "slide-down": "slide-down 0.5s forwards ease-in-out",
+        fade: "fade 0.5s forwards ease-in-out",
       },
     },
   },

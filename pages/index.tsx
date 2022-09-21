@@ -15,10 +15,9 @@ import Sidebar from "../components/Sidebar";
 const Home: NextPage = () => {
   // const [user, setUser] = useRecoilState(userState);
 
-  // useEffect(() => {
-  //   user.email ? Router.push("/") : Router.push("/login");
-  //   Router.push("/file_complaint");
-  // }, []);
+  useEffect(() => {
+    Router.push("/file_complaint");
+  }, []);
 
   // if (!user.email) {
   //   return <div></div>;
@@ -33,12 +32,6 @@ const Home: NextPage = () => {
 
       <Toaster position="top-right" />
       <Navbar />
-      <div className="flex">
-        <div className="w-[80px]">
-          <Sidebar />
-        </div>
-        <div className="w-[calc(100vw-80px)]">{/* <FileComplaint /> */}</div>
-      </div>
     </div>
   );
 };

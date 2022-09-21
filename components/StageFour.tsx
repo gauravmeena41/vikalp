@@ -1,10 +1,6 @@
 // @ts-nocheck
 
-import {
-  ChevronLeftIcon,
-  ChevronRightIcon,
-  PaperClipIcon,
-} from "@heroicons/react/solid";
+import { ArrowCircleUpIcon } from "@heroicons/react/solid";
 import React, { useState } from "react";
 import toast from "react-hot-toast";
 import { useRecoilState } from "recoil";
@@ -21,7 +17,7 @@ const StageFour = () => {
 
   const fileComplaint = async () => {
     try {
-      let res = await axios.post("api/complaint/create", {
+      let complaint = await axios.post("api/complaint/create", {
         odrProviderId: "62c82df5ea4b234384d2c554",
         complaintDescription: complaintDetail.complaintDescription,
         complaintCategory: complaintDetail.complaintCategory,
@@ -35,13 +31,14 @@ const StageFour = () => {
         file: complaintDetail.file.fileName,
       });
 
-      toast.success(`Copy your complaint id - ${res.data.data.comaplaintId}`);
       // setComplaintDetail({
       //   stage: 0,
       //   complaintDescription: "",
       //   complaintCategory: "",
       //   expectedResolution: "",
-      //   expectedResolutionDescription: "",
+      //   complainantName: "",
+      //   complainantEmail: "",
+      //   complainantPhone: "",
       //   respondentName: "",
       //   respondentEmail: "",
       //   respondentPhone: "",
@@ -49,19 +46,21 @@ const StageFour = () => {
       //     fileLink: "",
       //     fileType: "",
       //   },
-      //   consent: false,
-      //   status: "Pending",
       // });
 
-      Router.push(`/search?ComplainId=${res.data.data.comaplaintId}`);
+      complaint && toast.success("Complaint filled successfully 🙂");
+
+      complaint &&
+        Router.push(`/search?ComplainId=${complaint.data.data.comaplaintId}`);
     } catch (err) {
-      toast.error("Something went wrong");
+      console.log(err);
+      toast.error("Something went wrong ☹️");
     }
   };
 
   return (
     <div className="grid grid-cols-2 gap-10 w-full">
-      <div className="space-y-5">
+      <div className="space-y-5 animate-fade">
         <h1 className="text-mainColor text-2xl font-bold">Step Four</h1>
         <p className="text-mainColor text-sm">What redress are you seeking?</p>
         <div className="relative">
@@ -93,10 +92,10 @@ const StageFour = () => {
           </div>
         </div>
         {complaintDetail.expectedResolution === "Other" && (
-          <>
-            <p className="text-mainColor text-sm">
+          <div className="animate-slide-down">
+            {/* <p className="text-mainColor text-sm">
               Tell us about the redressal you seek briefly
-            </p>
+            </p> */}
             <textarea
               onChange={(e) =>
                 setComplaintDetail({
@@ -106,24 +105,27 @@ const StageFour = () => {
               }
               name=""
               value={complaintDetail.expectedResolutionDescription}
-              placeholder="Write here..."
+              placeholder="Tell us about the redressal you seek briefly"
               className={`border-[2px] border-purple-300 p-4 w-[350px] h-[150px] outline-none
           rounded-[2rem] text-purple-400 resize-none placeholder:text-purple-300`}
             ></textarea>
-          </>
+          </div>
         )}
         <p className="text-mainColor text-sm">
           Attach any file that will help the Neutral resolve your case
         </p>
         <label
-          className="w-[250px] flex p-4 rounded-full text-mainColor font-bold cursor-pointer border-2
-            border-secondaryColor"
+          className="w-[150px] flex items-center justify-center p-4 rounded-full text-mainColor font-bold cursor-pointer border-2
+            border-secondaryColor text-lg"
           htmlFor="chooseFile"
         >
           {!complaintDetail.file.fileLink ? (
-            <PaperClipIcon className="w-7 h-7 text-mainColor mr-2" />
+            <div className="flex items-center">
+              <ArrowCircleUpIcon className="w-7 h-7 text-mainColor mr-2" />
+              <p>Upload</p>
+            </div>
           ) : (
-            String(complaintDetail.file.fileLink).slice(0, 25)
+            String(complaintDetail.file.fileLink).split(".")[0].slice(0, 12)
           )}
         </label>
         <input
@@ -145,7 +147,7 @@ const StageFour = () => {
       <div className="flex items-end justify-end h-[530px]">
         <div className="flex items-end justify-end space-x-2">
           <button
-            className="text-white bg-mainColor px-5 py-1 rounded-2xl font-semibold"
+            className="button bg-mainColor"
             onClick={() =>
               setComplaintDetail({
                 ...complaintDetail,
@@ -156,9 +158,9 @@ const StageFour = () => {
             Prev
           </button>
           <button
-            className="text-white bg-mainColor px-5 py-1 rounded-2xl font-semibold"
+            className="button bg-mainColor"
             onClick={() =>
-              complaintDetail.file.fileLink
+              complaintDetail.expectedResolution
                 ? fileComplaint()
                 : toast.error("Please fill all the fields")
             }

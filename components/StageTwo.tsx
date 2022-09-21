@@ -9,25 +9,10 @@ import { complaintDetails } from "../atoms/complaintDetails";
 const StageTwo = () => {
   const [complaintDetail, setComplaintDetail] =
     useRecoilState(complaintDetails);
-  // const [otherParty, setOtherParty] = useState("Enterprise");
-  // const [selectedParty, setSelectedParty] = useState({
-  //   name: "",
-  //   email: "",
-  //   phone: "",
-  // });
-  // const [showDropDown, setShowDropDown] = useState(false);
-
-  // const parties = [
-  //   {
-  //     name: "Finvu",
-  //     email: "finvu@gmail.com",
-  //     phone: "0787878787",
-  //   },
-  // ];
 
   return (
     <div className="grid grid-cols-2 gap-10 w-full">
-      <div className="space-y-6">
+      <div className="space-y-6 animate-fade">
         <h1 className="text-mainColor text-2xl font-bold">Step Two</h1>
         <p className="text-mainColor text-sm">
           Against whom would you like to raise this grievance?
@@ -43,7 +28,7 @@ const StageTwo = () => {
             type="text"
             id="userName"
             value={complaintDetail.respondentName}
-            className="border-2 border-secondaryColor outline-none px-5 py-2 w-[300px] rounded-[2rem] text-mainColor font-medium text-lg"
+            className="input"
             onChange={(e) =>
               setComplaintDetail({
                 ...complaintDetail,
@@ -61,7 +46,7 @@ const StageTwo = () => {
             type="email"
             id="userEmail"
             value={complaintDetail.respondentEmail}
-            className="border-2 border-secondaryColor outline-none px-5 py-2 w-[300px] rounded-[2rem] text-mainColor font-medium text-lg"
+            className="input"
             onChange={(e) =>
               setComplaintDetail({
                 ...complaintDetail,
@@ -79,7 +64,7 @@ const StageTwo = () => {
             type="text"
             id="userPhone"
             value={complaintDetail.respondentPhone}
-            className="border-2 border-secondaryColor outline-none px-5 py-2 w-[300px] rounded-[2rem] text-mainColor font-medium text-lg"
+            className="input"
             onChange={(e) =>
               setComplaintDetail({
                 ...complaintDetail,
@@ -92,7 +77,7 @@ const StageTwo = () => {
       <div className="flex items-end justify-end h-[530px]">
         <div className="flex items-end justify-end space-x-2">
           <button
-            className="text-white bg-mainColor px-5 py-1 rounded-2xl font-semibold"
+            className="button bg-mainColor"
             onClick={() =>
               setComplaintDetail({
                 ...complaintDetail,
@@ -103,7 +88,7 @@ const StageTwo = () => {
             Prev
           </button>
           <button
-            className="text-white bg-mainColor px-5 py-1 rounded-2xl font-semibold"
+            className="button bg-mainColor"
             onClick={() =>
               complaintDetail.respondentName &&
               complaintDetail.respondentEmail.match(

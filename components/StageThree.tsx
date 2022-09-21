@@ -22,7 +22,7 @@ const StageThree = () => {
 
   return (
     <div className="grid grid-cols-2 gap-10">
-      <div className="space-y-5">
+      <div className="space-y-5 animate-fade">
         <h1 className="text-mainColor text-2xl font-bold">Step Three</h1>
         <p className="text-mainColor text-sm">Tell us about your complaint</p>
         <textarea
@@ -59,7 +59,7 @@ const StageThree = () => {
                 complaintDetail.complaintCategory === category
                   ? "bg-mainColor"
                   : "bg-secondaryColor"
-              }  rounded-full text-lg text-white font-medium px-6 py-1 ml-0 m-2 active:scale-95 transition-all duration-300 ease-in-out`}
+              }  button ml-0 m-2 `}
             >
               {category}
             </button>
@@ -90,7 +90,7 @@ const StageThree = () => {
         <div className="flex items-end justify-end h-[200px]">
           <div className="flex items-end justify-end space-x-2">
             <button
-              className="text-white bg-mainColor px-5 py-1 rounded-2xl font-semibold"
+              className="button bg-mainColor"
               onClick={() =>
                 setComplaintDetail({
                   ...complaintDetail,
@@ -101,7 +101,7 @@ const StageThree = () => {
               Prev
             </button>
             <button
-              className="text-white bg-mainColor px-5 py-1 rounded-2xl font-semibold"
+              className="button bg-mainColor"
               onClick={() =>
                 complaintDetail.complaintCategory &&
                 complaintDetail.complaintDescription

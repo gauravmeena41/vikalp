@@ -25,8 +25,9 @@ const ProgressBar = () => {
         ></div>
         <div
           onClick={() =>
-            complaintDetail.complaintCategory &&
-            complaintDetail.complaintDescription
+            complaintDetail.complainantName &&
+            complaintDetail.complainantEmail &&
+            complaintDetail.complainantPhone
               ? setComplaintDetail({ ...complaintDetail, stage: 1 })
               : toast.error("Please fill all the fields")
           }
@@ -36,8 +37,9 @@ const ProgressBar = () => {
         ></div>
         <div
           onClick={() =>
-            complaintDetail.expectedResolution &&
-            complaintDetail.expectedResolutionDescription
+            complaintDetail.respondentName &&
+            complaintDetail.respondentEmail &&
+            complaintDetail.respondentPhone
               ? setComplaintDetail({ ...complaintDetail, stage: 2 })
               : toast.error("Please fill all the fields")
           }
@@ -47,9 +49,8 @@ const ProgressBar = () => {
         ></div>
         <div
           onClick={() =>
-            complaintDetail.respondentName &&
-            complaintDetail.respondentEmail &&
-            complaintDetail.respondentPhone
+            complaintDetail.complaintDescription &&
+            complaintDetail.complaintCategory
               ? setComplaintDetail({ ...complaintDetail, stage: 3 })
               : toast.error("Please fill all the fields")
           }

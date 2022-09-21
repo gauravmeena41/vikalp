@@ -34,14 +34,7 @@ const file_complaint = () => {
         <link rel="icon" href="/Images/law.png" />
       </Head>
       <Navbar />
-      <div className="flex">
-        <div className="w-[80px]">
-          <Sidebar />
-        </div>
-        <div className="w-[calc(100vw-80px)]">
-          <FileComplaint />
-        </div>
-      </div>
+      <FileComplaint />
     </div>
   );
 };

@@ -1,7 +1,6 @@
 // @ts-nocheck
 
-import { ChevronLeftIcon, ChevronRightIcon } from "@heroicons/react/solid";
-import React, { useState } from "react";
+import React from "react";
 import toast from "react-hot-toast";
 import { useRecoilState } from "recoil";
 import { complaintDetails } from "../atoms/complaintDetails";
@@ -9,25 +8,10 @@ import { complaintDetails } from "../atoms/complaintDetails";
 const StageOne = () => {
   const [complaintDetail, setComplaintDetail] =
     useRecoilState(complaintDetails);
-  // const [otherParty, setOtherParty] = useState("Enterprise");
-  // const [selectedParty, setSelectedParty] = useState({
-  //   name: "",
-  //   email: "",
-  //   phone: "",
-  // });
-  // const [showDropDown, setShowDropDown] = useState(false);
-
-  // const parties = [
-  //   {
-  //     name: "Finvu",
-  //     email: "finvu@gmail.com",
-  //     phone: "0787878787",
-  //   },
-  // ];
 
   return (
     <div className="grid grid-cols-2 gap-10 w-full">
-      <div className="space-y-6">
+      <div className="space-y-6 animate-fade">
         <h1 className="text-mainColor text-2xl font-bold">Step One</h1>
         <p className="text-mainColor text-sm">Please enter your details.</p>
         <div className="flex flex-col space-y-5">
@@ -41,7 +25,7 @@ const StageOne = () => {
             type="text"
             id="userName"
             value={complaintDetail.complainantName}
-            className="border-2 border-secondaryColor outline-none px-5 py-2 w-[300px] rounded-[2rem] text-mainColor font-medium text-lg"
+            className="input"
             onChange={(e) =>
               setComplaintDetail({
                 ...complaintDetail,
@@ -59,7 +43,7 @@ const StageOne = () => {
             type="email"
             id="userEmail"
             value={complaintDetail.complainantEmail}
-            className="border-2 border-secondaryColor outline-none px-5 py-2 w-[300px] rounded-[2rem] text-mainColor font-medium text-lg"
+            className="input"
             onChange={(e) =>
               setComplaintDetail({
                 ...complaintDetail,
@@ -77,7 +61,7 @@ const StageOne = () => {
             type="text"
             id="userPhone"
             value={complaintDetail.complainantPhone}
-            className="border-2 border-secondaryColor outline-none px-5 py-2 w-[300px] rounded-[2rem] text-mainColor font-medium text-lg"
+            className="input"
             onChange={(e) =>
               setComplaintDetail({
                 ...complaintDetail,
@@ -89,11 +73,9 @@ const StageOne = () => {
       </div>
       <div className="flex items-end justify-end h-[530px]">
         <div className="flex items-end justify-end space-x-2">
-          <button className="text-white bg-secondaryColor px-5 py-1 rounded-2xl font-semibold">
-            Prev
-          </button>
+          <button className="button bg-secondaryColor">Prev</button>
           <button
-            className="text-white bg-mainColor px-5 py-1 rounded-2xl font-semibold"
+            className="button bg-mainColor"
             onClick={() =>
               complaintDetail.complainantName &&
               complaintDetail.complainantEmail.match(
