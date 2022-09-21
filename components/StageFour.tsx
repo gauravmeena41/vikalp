@@ -12,11 +12,13 @@ const StageFour = () => {
   const [complaintDetail, setComplaintDetail] =
     useRecoilState(complaintDetails);
   const [showDropDown, setShowDropDown] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   const categories = ["Compensation", "Discounts", "Other"];
 
   const fileComplaint = async () => {
     try {
+      setLoading(true);
       let complaint = await axios.post("api/complaint/create", {
         odrProviderId: "62c82df5ea4b234384d2c554",
         complaintDescription: complaintDetail.complaintDescription,
@@ -31,25 +33,25 @@ const StageFour = () => {
         file: complaintDetail.file.fileName,
       });
 
-      // setComplaintDetail({
-      //   stage: 0,
-      //   complaintDescription: "",
-      //   complaintCategory: "",
-      //   expectedResolution: "",
-      //   complainantName: "",
-      //   complainantEmail: "",
-      //   complainantPhone: "",
-      //   respondentName: "",
-      //   respondentEmail: "",
-      //   respondentPhone: "",
-      //   file: {
-      //     fileLink: "",
-      //     fileType: "",
-      //   },
-      // });
+      setComplaintDetail({
+        stage: 0,
+        complaintDescription: "",
+        complaintCategory: "",
+        expectedResolution: "",
+        complainantName: "",
+        complainantEmail: "",
+        complainantPhone: "",
+        respondentName: "",
+        respondentEmail: "",
+        respondentPhone: "",
+        file: {
+          fileLink: "",
+          fileType: "",
+        },
+      });
 
       complaint && toast.success("Complaint filled successfully 🙂");
-
+      setLoading(false);
       complaint &&
         Router.push(`/search?ComplainId=${complaint.data.data.comaplaintId}`);
     } catch (err) {
@@ -165,7 +167,18 @@ const StageFour = () => {
                 : toast.error("Please fill all the fields")
             }
           >
-            Submit
+            {!loading ? (
+              "Submit"
+            ) : (
+              <>
+                <div class="loading">
+                  <div></div>
+                  <div></div>
+                  <div></div>
+                </div>
+                <div></div>
+              </>
+            )}
           </button>
         </div>
       </div>
