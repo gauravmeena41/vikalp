@@ -9,10 +9,6 @@ const ComplaintSchema = new Schema({
   },
   odrProviderId: {
     type: String,
-    ref: "User",
-  },
-  complainantId: {
-    type: String,
     required: true,
   },
   complaintDescription: {
@@ -29,7 +25,6 @@ const ComplaintSchema = new Schema({
   },
   expectedResolutionDescription: {
     type: String,
-    required: true,
   },
   complainantName: {
     type: String,
@@ -62,10 +57,6 @@ const ComplaintSchema = new Schema({
     type: String,
     required: true,
     default: "Pending",
-  },
-  consent: {
-    type: Boolean,
-    required: true,
   },
   createdAt: {
     type: Date,

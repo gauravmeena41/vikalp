@@ -1,7 +1,7 @@
 // @ts-nocheck
 
 import { ChevronLeftIcon, ChevronRightIcon } from "@heroicons/react/solid";
-import React, { useState } from "react";
+import React from "react";
 import toast from "react-hot-toast";
 import { useRecoilState } from "recoil";
 import { complaintDetails } from "../atoms/complaintDetails";
@@ -9,183 +9,112 @@ import { complaintDetails } from "../atoms/complaintDetails";
 const StageThree = () => {
   const [complaintDetail, setComplaintDetail] =
     useRecoilState(complaintDetails);
-  const [otherParty, setOtherParty] = useState("Enterprise");
-  const [selectedParty, setSelectedParty] = useState({
-    name: "",
-    email: "",
-    phone: "",
-  });
-  const [showDropDown, setShowDropDown] = useState(false);
 
-  const parties = [
-    {
-      name: "Finvu",
-      email: "finvu@gmail.com",
-      phone: "0787878787",
-    },
+  const categories = [
+    "Fraud",
+    "Harassment",
+    "Violence",
+    "Cheating",
+    "Property",
+    "Loan",
+    "Other",
   ];
 
   return (
-    <div className="grid grid-cols-2 gap-10 w-full">
-      <div className="space-y-6">
+    <div className="grid grid-cols-2 gap-10">
+      <div className="space-y-5">
         <h1 className="text-mainColor text-2xl font-bold">Step Three</h1>
-        <p className="text-mainColor text-sm">
-          Against whom would you like to raise this grievance?
-        </p>
-        <div className="grid grid-cols-3">
-          <div
-            onClick={(e) => setOtherParty(e.target.innerHTML)}
-            className={`${
-              otherParty === "Individual"
-                ? "bg-mainColor text-[#f1f1f1]"
-                : "text-gray-700"
-            } flex justify-center font-medium cursor-pointer py-2 border-2 rounded-l-[2rem] border-mainColor`}
-          >
-            Individual
-          </div>
-          <div
-            onClick={(e) => {
-              setOtherParty(e.target.innerHTML);
-            }}
-            className={`${
-              otherParty === "Enterprise"
-                ? "bg-mainColor text-[#f1f1f1]"
-                : "text-gray-700"
-            } flex justify-center font-medium cursor-pointer py-2 border-2 border-l-0 border-mainColor`}
-          >
-            Enterprise
-          </div>
-          <div
-            onClick={(e) => {
-              setOtherParty(e.target.innerHTML);
-              toast.error(
-                "Only Individual and Enterprises are supported till now 🙂"
-              );
-            }}
-            className={`${
-              otherParty === "Other"
-                ? "bg-mainColor text-[#f1f1f1]"
-                : "text-gray-700"
-            } flex justify-center font-medium cursor-pointer py-2 border-2 border-l-0 rounded-r-[2rem] border-mainColor`}
-          >
-            Other
-          </div>
+        <p className="text-mainColor text-sm">Tell us about your complaint</p>
+        <textarea
+          onChange={(e) =>
+            setComplaintDetail({
+              ...complaintDetail,
+              complaintDescription: e.target.value,
+            })
+          }
+          name=""
+          value={complaintDetail.complaintDescription}
+          placeholder="Write here..."
+          className="border-[2px] border-purple-300 p-4 w-[350px] h-[250px] outline-none
+          rounded-[2rem] text-purple-400 resize-none placeholder:text-purple-300"
+        ></textarea>
+        <p className="text-mainColor font-medium text-lg">Category</p>
+        <div className="flex flex-wrap">
+          {categories.map((category, key) => (
+            <button
+              key={key}
+              onClick={(e) => {
+                setComplaintDetail({
+                  ...complaintDetail,
+                  complaintCategory:
+                    complaintDetail.complaintCategory &&
+                    complaintDetail.complaintCategory === category
+                      ? ""
+                      : e.target.value,
+                });
+              }}
+              type="button"
+              value={category}
+              className={`${
+                complaintDetail.complaintCategory === category
+                  ? "bg-mainColor"
+                  : "bg-secondaryColor"
+              }  rounded-full text-lg text-white font-medium px-6 py-1 ml-0 m-2 active:scale-95 transition-all duration-300 ease-in-out`}
+            >
+              {category}
+            </button>
+          ))}
         </div>
-        {otherParty === "Enterprise" ? (
-          <div
-            className={`w-[300px] px-5 py-2 text-xl font-medium text-mainColor cursor-pointer border-2 border-purple-300 rounded-[2rem]`}
-            onClick={() => setShowDropDown(!showDropDown)}
-          >
-            {!showDropDown &&
-              (selectedParty.name ? selectedParty.name : "Select an option")}
-            {showDropDown &&
-              parties.map((party, key) => (
-                <div
-                  key={key}
-                  onClick={() => {
-                    setSelectedParty(party);
-                    setComplaintDetail({
-                      ...complaintDetail,
-                      respondentName: party.name,
-                      respondentEmail: party.email,
-                      respondentPhone: party.phone,
-                    });
-                    setShowDropDown(false);
-                  }}
-                  className="py-2 text-xl font-medium text-purple-300 cursor-pointer
-                    hover:text-mainColor last-of-type:rounded-b-lg"
-                >
-                  {party.name}
-                </div>
-              ))}
-          </div>
-        ) : (
-          otherParty === "Individual" && (
-            <div className="flex flex-col space-y-5">
-              <label
-                htmlFor="userName"
-                className="text-xl text-mainColor font-medium"
-              >
-                Name
-              </label>
-              <input
-                type="text"
-                id="userName"
-                value={complaintDetail.respondentName}
-                className="border-2 border-secondaryColor outline-none px-5 py-2 w-[300px] rounded-[2rem] text-mainColor font-medium text-lg"
-                onChange={(e) =>
-                  setComplaintDetail({
-                    ...complaintDetail,
-                    respondentName: e.target.value,
-                  })
-                }
-              />
-              <label
-                htmlFor="userEmail"
-                className="text-xl text-mainColor font-medium"
-              >
-                Email
-              </label>
-              <input
-                type="email"
-                id="userEmail"
-                value={complaintDetail.respondentEmail}
-                className="border-2 border-secondaryColor outline-none px-5 py-2 w-[300px] rounded-[2rem] text-mainColor font-medium text-lg"
-                onChange={(e) =>
-                  setComplaintDetail({
-                    ...complaintDetail,
-                    respondentEmail: e.target.value,
-                  })
-                }
-              />
-              <label
-                htmlFor="userPhone"
-                className="text-xl text-mainColor font-medium"
-              >
-                Phone
-              </label>
-              <input
-                type="text"
-                id="userPhone"
-                value={complaintDetail.respondentPhone}
-                className="border-2 border-secondaryColor outline-none px-5 py-2 w-[300px] rounded-[2rem] text-mainColor font-medium text-lg"
-                onChange={(e) =>
-                  setComplaintDetail({
-                    ...complaintDetail,
-                    respondentPhone: e.target.value,
-                  })
-                }
-              />
-            </div>
-          )
-        )}
       </div>
-      <div className="flex items-end justify-end h-[530px]">
-        <div className="flex items-end justify-end">
-          <ChevronLeftIcon
-            onClick={() =>
-              setComplaintDetail({
-                ...complaintDetail,
-                stage: complaintDetail.stage - 1,
-              })
-            }
-            className="text-mainColor w-10 h-10 cursor-pointer"
-          />
-          <ChevronRightIcon
-            onClick={() =>
-              complaintDetail.respondentName &&
-              complaintDetail.respondentEmail.match(
-                /^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/
-              ) &&
-              complaintDetail.respondentPhone.match(/^\d{10}$/)
-                ? setComplaintDetail({
-                    ...complaintDetail,
-                    stage: complaintDetail.stage + 1,
-                  })
-                : toast.error("Please fill all the fields correctly")
-            }
-            className="text-mainColor w-10 h-10 cursor-pointer"
-          />
+      <div className="pl-20 border-l-[3px] border-mainColor space-y-6">
+        <h1 className="text-mainColor text-2xl font-bold">Case Categories</h1>
+        <div className="space-y-3 border-b-[3px] border-mainColor pb-4">
+          <h1 className="rounded-full text-lg text-white font-medium px-6 py-1 bg-mainColor w-fit">
+            Illegal Data Requests
+          </h1>
+          <p className="text-mainColor">
+            Data collected without user's consent.
+          </p>
+        </div>
+        <div className="space-y-3 border-b-[3px] border-mainColor pb-4">
+          <h1 className="rounded-full text-lg text-white font-medium px-6 py-1 bg-mainColor w-fit">
+            Other
+          </h1>
+          <p className="text-mainColor">
+            Any other practices, in which user faces inconvenience
+          </p>
+        </div>
+        <p className="text-mainColor text-sm font-medium uppercase underline">
+          See the Full List
+        </p>
+        <div className="flex items-end justify-end h-[200px]">
+          <div className="flex items-end justify-end space-x-2">
+            <button
+              className="text-white bg-mainColor px-5 py-1 rounded-2xl font-semibold"
+              onClick={() =>
+                setComplaintDetail({
+                  ...complaintDetail,
+                  stage: complaintDetail.stage - 1,
+                })
+              }
+            >
+              Prev
+            </button>
+            <button
+              className="text-white bg-mainColor px-5 py-1 rounded-2xl font-semibold"
+              onClick={() =>
+                complaintDetail.complaintCategory &&
+                complaintDetail.complaintDescription
+                  ? setComplaintDetail({
+                      ...complaintDetail,
+                      stage: complaintDetail.stage + 1,
+                    })
+                  : toast.error("Please fill all the fields")
+              }
+            >
+              Next
+            </button>
+          </div>
         </div>
       </div>
     </div>

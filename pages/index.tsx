@@ -13,16 +13,16 @@ import Navbar from "../components/Navbar";
 import Sidebar from "../components/Sidebar";
 
 const Home: NextPage = () => {
-  const [user, setUser] = useRecoilState(userState);
+  // const [user, setUser] = useRecoilState(userState);
 
-  useEffect(() => {
-    user.email ? Router.push("/") : Router.push("/login");
-    Router.push("/file_complaint");
-  }, []);
+  // useEffect(() => {
+  //   user.email ? Router.push("/") : Router.push("/login");
+  //   Router.push("/file_complaint");
+  // }, []);
 
-  if (!user.email) {
-    return <div></div>;
-  }
+  // if (!user.email) {
+  //   return <div></div>;
+  // }
 
   return (
     <div>

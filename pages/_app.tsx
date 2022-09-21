@@ -21,7 +21,7 @@ Router.events.on("routeChangeError", progress.finish);
 function MyApp({ Component, pageProps }: AppProps) {
   return (
     <RecoilRoot>
-      <Toaster position="top-right"/>
+      <Toaster position="top-right" />
       <Component {...pageProps} />
     </RecoilRoot>
   );

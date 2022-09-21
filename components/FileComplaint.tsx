@@ -20,7 +20,7 @@ const FileComplaint = () => {
         <h1
           className={`${
             complaintDetail.stage < 4 ? "text-mainColor" : "text-purple-300"
-          } text-4xl font-bold underline cursor-pointer`}
+          } text-4xl font-bold  cursor-pointer`}
           onClick={() =>
             setComplaintDetail({
               ...complaintDetail,
@@ -28,12 +28,12 @@ const FileComplaint = () => {
             })
           }
         >
-          File
+          &nbsp;
         </h1>
         <h1
           className={`${
             complaintDetail.stage > 3 ? "text-mainColor" : "text-purple-300"
-          } text-4xl font-bold underline cursor-pointer`}
+          } text-4xl font-bold  cursor-pointer`}
           onClick={() =>
             complaintDetail.consent
               ? setComplaintDetail({
@@ -43,7 +43,7 @@ const FileComplaint = () => {
               : toast.error("Please fill all the fields")
           }
         >
-          Confirm
+          &nbsp;
         </h1>
       </div>
       <div className="flex space-x-28">
@@ -52,7 +52,7 @@ const FileComplaint = () => {
         {complaintDetail.stage == 1 && <StageTwo />}
         {complaintDetail.stage == 2 && <StageThree />}
         {complaintDetail.stage == 3 && <StageFour />}
-        {complaintDetail.stage == 4 && <ComplaintSummary />}
+        {/* {complaintDetail.stage == 4 && <ComplaintSummary />} */}
       </div>
     </div>
   );

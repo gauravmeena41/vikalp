@@ -9,7 +9,9 @@ export const complaintDetails = atom({
     complaintDescription: "",
     complaintCategory: "",
     expectedResolution: "",
-    expectedResolutionDescription: "",
+    complainantName: "",
+    complainantEmail: "",
+    complainantPhone: "",
     respondentName: "",
     respondentEmail: "",
     respondentPhone: "",
@@ -17,7 +19,5 @@ export const complaintDetails = atom({
       fileLink: "",
       fileType: "",
     },
-    consent: false,
-    status: "Pending",
   },
 });

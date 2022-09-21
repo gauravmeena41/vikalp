@@ -1,22 +1,117 @@
 // @ts-nocheck
 
-import { PaperClipIcon } from "@heroicons/react/outline";
-import { ChevronLeftIcon, ChevronRightIcon } from "@heroicons/react/solid";
-import React from "react";
+import {
+  ChevronLeftIcon,
+  ChevronRightIcon,
+  PaperClipIcon,
+} from "@heroicons/react/solid";
+import React, { useState } from "react";
 import toast from "react-hot-toast";
 import { useRecoilState } from "recoil";
 import { complaintDetails } from "../atoms/complaintDetails";
+import axios from "axios";
+import Router from "next/router";
 
 const StageFour = () => {
   const [complaintDetail, setComplaintDetail] =
     useRecoilState(complaintDetails);
+  const [showDropDown, setShowDropDown] = useState(false);
 
-  const categories = ["Screenshot", "Affidavit", "Agreement", "Recording"];
+  const categories = ["Compensation", "Discounts", "Other"];
+
+  const fileComplaint = async () => {
+    try {
+      let res = await axios.post("api/complaint/create", {
+        odrProviderId: "62c82df5ea4b234384d2c554",
+        complaintDescription: complaintDetail.complaintDescription,
+        complaintCategory: complaintDetail.complaintCategory,
+        expectedResolution: complaintDetail.expectedResolution,
+        complainantName: complaintDetail.complainantName,
+        complainantEmail: complaintDetail.complainantEmail,
+        complainantPhone: complaintDetail.complainantPhone,
+        respondentName: complaintDetail.respondentName,
+        respondentEmail: complaintDetail.respondentEmail,
+        respondentPhone: complaintDetail.respondentPhone,
+        file: complaintDetail.file.fileName,
+      });
+
+      toast.success(`Copy your complaint id - ${res.data.data.comaplaintId}`);
+      // setComplaintDetail({
+      //   stage: 0,
+      //   complaintDescription: "",
+      //   complaintCategory: "",
+      //   expectedResolution: "",
+      //   expectedResolutionDescription: "",
+      //   respondentName: "",
+      //   respondentEmail: "",
+      //   respondentPhone: "",
+      //   file: {
+      //     fileLink: "",
+      //     fileType: "",
+      //   },
+      //   consent: false,
+      //   status: "Pending",
+      // });
+
+      Router.push(`/search?ComplainId=${res.data.data.comaplaintId}`);
+    } catch (err) {
+      toast.error("Something went wrong");
+    }
+  };
 
   return (
-    <div className="grid grid-cols-2 gap-10">
-      <div className="space-y-6">
-        <h1 className="text-mainColor text-2xl font-bold">Step One</h1>
+    <div className="grid grid-cols-2 gap-10 w-full">
+      <div className="space-y-5">
+        <h1 className="text-mainColor text-2xl font-bold">Step Four</h1>
+        <p className="text-mainColor text-sm">What redress are you seeking?</p>
+        <div className="relative">
+          <div
+            onClick={() => setShowDropDown(!showDropDown)}
+            className={`w-[300px] px-5 py-2 text-xl font-medium text-purple-300 cursor-pointer border-2 border-purple-300 rounded-[2rem]`}
+          >
+            {!showDropDown &&
+              (complaintDetail.expectedResolution
+                ? complaintDetail.expectedResolution
+                : " Select an option")}
+            {showDropDown &&
+              categories.map((category, key) => (
+                <div
+                  key={key}
+                  className="py-2 text-xl font-medium text-purple-300 cursor-pointer
+                hover:text-mainColor last-of-type:rounded-b-lg"
+                  onClick={(e) => {
+                    setComplaintDetail({
+                      ...complaintDetail,
+                      expectedResolution: e.target.innerHTML,
+                    });
+                    setShowDropDown(false);
+                  }}
+                >
+                  {category}
+                </div>
+              ))}
+          </div>
+        </div>
+        {complaintDetail.expectedResolution === "Other" && (
+          <>
+            <p className="text-mainColor text-sm">
+              Tell us about the redressal you seek briefly
+            </p>
+            <textarea
+              onChange={(e) =>
+                setComplaintDetail({
+                  ...complaintDetail,
+                  expectedResolutionDescription: e.target.value,
+                })
+              }
+              name=""
+              value={complaintDetail.expectedResolutionDescription}
+              placeholder="Write here..."
+              className={`border-[2px] border-purple-300 p-4 w-[350px] h-[150px] outline-none
+          rounded-[2rem] text-purple-400 resize-none placeholder:text-purple-300`}
+            ></textarea>
+          </>
+        )}
         <p className="text-mainColor text-sm">
           Attach any file that will help the Neutral resolve your case
         </p>
@@ -46,105 +141,30 @@ const StageFour = () => {
             })
           }
         />
-        <p className="text-mainColor">What kind of Attachment is it?</p>
-        <div className="flex flex-wrap">
-          {categories.map((category, key) => (
-            <button
-              key={key}
-              onClick={(e) => {
-                setComplaintDetail({
-                  ...complaintDetail,
-                  file: {
-                    ...complaintDetail.file,
-                    fileType: e.target.innerHTML,
-                  },
-                });
-              }}
-              type="button"
-              value={category}
-              className={`${
-                complaintDetail.file.fileType === category
-                  ? "bg-mainColor"
-                  : "bg-secondaryColor"
-              }  rounded-full text-lg text-white font-medium px-6 py-1 ml-0 m-2 active:scale-95 transition-all duration-300 ease-in-out`}
-            >
-              {category}
-            </button>
-          ))}
-        </div>
-        <div className="flex items-center space-x-2 mb-6">
-          <input
-            type="checkbox"
-            className="appearance-none border checked:bg-mainColor text-white rounded-[6px] w-4 h-4 outline-none cursor-pointer"
-            name=""
-            id="t&C"
-            required
-            onChange={(e) =>
-              setComplaintDetail({
-                ...complaintDetail,
-                consent: e.target.checked,
-              })
-            }
-          />
-          <label
-            className="text-sm text-mainColor font-medium cursor-pointer"
-            htmlFor="t&C"
-          >
-            Suljhao Magar Pyaar Se
-          </label>
-        </div>
-        <div className="flex items-center">
-          <button
-            onClick={() =>
-              complaintDetail.file.fileType &&
-              complaintDetail.consent &&
-              complaintDetail.file.fileLink
-                ? setComplaintDetail({
-                    ...complaintDetail,
-                    stage: complaintDetail.stage + 1,
-                  })
-                : toast.error("Please fill all the fields")
-            }
-            className={`w-[220px] py-3 border-2 rounded-lg bg-mainColor text-lg text-white font-medium active:scale-95 transition-all duration-300 ease-in-out`}
-          >
-            Submit
-          </button>
-        </div>
       </div>
-      <div className="pl-20 border-l-[3px] border-mainColor space-y-6">
-        <h1 className="text-mainColor text-2xl font-bold">
-          Acceptable Documents
-        </h1>
-        <div className="space-y-3 border-b-[3px] border-mainColor pb-4">
-          <h1 className="rounded-full text-lg text-white font-medium px-6 py-1 bg-mainColor w-fit">
-            Invoice
-          </h1>
-          <p className="text-mainColor">
-            Invoices will be considered as a solid proof of service.
-          </p>
-        </div>
-        <div className="space-y-3 border-b-[3px] border-mainColor pb-4">
-          <h1 className="rounded-full text-lg text-white font-medium px-6 py-1 bg-mainColor w-fit">
-            Screenshot
-          </h1>
-          <p className="text-mainColor">
-            Screenshots are also considered as a proof.
-          </p>
-        </div>
-        <p className="text-mainColor text-sm font-medium uppercase underline">
-          See the Full List
-        </p>
-        <div className="flex items-end justify-end h-[200px]">
-          <ChevronLeftIcon
+      <div className="flex items-end justify-end h-[530px]">
+        <div className="flex items-end justify-end space-x-2">
+          <button
+            className="text-white bg-mainColor px-5 py-1 rounded-2xl font-semibold"
             onClick={() =>
               setComplaintDetail({
                 ...complaintDetail,
                 stage: complaintDetail.stage - 1,
               })
             }
-            className="text-mainColor w-10 h-10 cursor-pointer"
-          />
-          <ChevronRightIcon className="text-secondaryColor w-10 h-10 cursor-pointer" />
+          >
+            Prev
+          </button>
+          <button
+            className="text-white bg-mainColor px-5 py-1 rounded-2xl font-semibold"
+            onClick={() =>
+              complaintDetail.file.fileLink
+                ? fileComplaint()
+                : toast.error("Please fill all the fields")
+            }
+          >
+            Submit
+          </button>
         </div>
       </div>
     </div>

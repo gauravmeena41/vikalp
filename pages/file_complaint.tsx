@@ -12,22 +12,21 @@ import Navbar from "../components/Navbar";
 import Sidebar from "../components/Sidebar";
 
 const file_complaint = () => {
-  const user = useRecoilValue(userState)
-  const [complaintDetail, setComplaintDetail] =
-    useRecoilState(complaintDetails);
+  // const user = useRecoilValue(userState)
+  // const [complaintDetail, setComplaintDetail] =
+  //   useRecoilState(complaintDetails);
 
-  useEffect(() => {
-    user.email ? Router.push("/file_complaint") : Router.push("/login");
-    setComplaintDetail({
-      ...complaintDetail,
-      stage: 0,
-    });
-  }, []);
+  // useEffect(() => {
+  //   user.email ? Router.push("/file_complaint") : Router.push("/login");
+  //   setComplaintDetail({
+  //     ...complaintDetail,
+  //     stage: 0,
+  //   });
+  // }, []);
 
-
-  if (!user.email) {
-    return <div></div>;
-  }
+  // if (!user.email) {
+  //   return <div></div>;
+  // }
   return (
     <div>
       <Head>

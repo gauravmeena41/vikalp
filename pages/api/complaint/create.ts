@@ -11,55 +11,31 @@ export default async function handler(req: any, res: any) {
   try {
     const {
       odrProviderId,
-      complainantId,
       complaintDescription,
       complaintCategory,
       expectedResolution,
-      expectedResolutionDescription,
       complainantName,
       complainantEmail,
       complainantPhone,
       respondentName,
       respondentEmail,
       respondentPhone,
-      files,
-      status,
-      consent,
+      fileLink,
     } = req.body;
-    const odrProvider = await User.findOne({
-      _id: mongoose.Types.ObjectId(odrProviderId),
-    });
-    const user = await User.findOne({
-      _id: mongoose.Types.ObjectId(complainantId),
-    });
-    if (!odrProvider || (odrProvider && !odrProvider.role))
-      return res.json({
-        status: 0,
-        message: "This ODR Provider is not registered on Vikalp",
-      });
-    else if (!user)
-      return res.json({
-        status: 0,
-        message: "This user is not registered on Vikalp",
-      });
 
     const complaint = await Complaint.create({
-      comaplaintId: await generateUniqueId(),
       odrProviderId,
-      complainantId,
+      comaplaintId: await generateUniqueId(),
       complaintDescription,
       complaintCategory,
       expectedResolution,
-      expectedResolutionDescription,
       complainantName,
       complainantEmail,
       complainantPhone,
       respondentName,
       respondentEmail,
       respondentPhone,
-      files,
-      status,
-      consent,
+      fileLink,
     });
 
     // sendMail({
@@ -71,32 +47,31 @@ export default async function handler(req: any, res: any) {
     //   ODR Provider: ${odrProvider.name}\n
     //   Complaint Id: ${complaint.comaplaintId}`,
     // });
-    await sendMail({
-      from: process.env.MAIL_EMAIL_ID,
-      to: complainantEmail,
-      subject: "Complaint Filled Successfully",
-      text: `Complaint filled successfully:\n
-      ${complaint.complainantName} vs ${complaint.respondentName}\n
-      ODR Provider: ${odrProvider.name}\n
-      Complaint Id: ${complaint.comaplaintId}`,
-    });
-    await sendMail({
-      from: process.env.MAIL_EMAIL_ID,
-      to: respondentEmail,
-      subject: "Complaint Filled against You",
-      text: `A complaint has been filled aginst you by ${complaint.complainantName}\n
-               Dispute will be resolved by the ODR Provider: ${odrProvider.name}\n
-               Complaint Id of the same is ${complaint.comaplaintId}`,
-    });
-    await sendMail({
-      from: process.env.MAIL_EMAIL_ID,
-      to: odrProvider.email,
-      subject: "Received a new Complaint on Vikalp",
-      text: `You have received a new complaint on vikalp Platform. Please checkout the details listed below:\n
-              ${complaint.complainantName} vs ${complaint.respondentName}\n
-                Complaint Id: ${complaint.comaplaintId}\n
-                Happy Resolving`,
-    });
+    // await sendMail({
+    //   from: process.env.MAIL_EMAIL_ID,
+    //   to: complainantEmail,
+    //   subject: "Complaint Filled Successfully",
+    //   text: `Complaint filled successfully:\n
+    //   ${complaint.complainantName} vs ${complaint.respondentName}\n
+    //   Complaint Id: ${complaint.comaplaintId}`,
+    // });
+    // await sendMail({
+    //   from: process.env.MAIL_EMAIL_ID,
+    //   to: respondentEmail,
+    //   subject: "Complaint Filled against You",
+    //   text: `A complaint has been filled aginst you by ${complaint.complainantName}\n
+    //            Dispute will be resolved by SAMA\n
+    //            Complaint Id of the same is ${complaint.comaplaintId}`,
+    // });
+    // await sendMail({
+    //   from: process.env.MAIL_EMAIL_ID,
+    //   to: odrProvider.email,
+    //   subject: "Received a new Complaint on Vikalp",
+    //   text: `You have received a new complaint on vikalp Platform. Please checkout the details listed below:\n
+    //           ${complaint.complainantName} vs ${complaint.respondentName}\n
+    //             Complaint Id: ${complaint.comaplaintId}\n
+    //             Happy Resolving`,
+    // });
 
     res.status(200).json({
       status: 1,

@@ -8,7 +8,7 @@ import Navbar from "../components/Navbar";
 import Sidebar from "../components/Sidebar";
 import { SearchIcon } from "@heroicons/react/outline";
 import axios from "axios";
-import Router from "next/router";
+import Router, { useRouter } from "next/router";
 import toast, { LoaderIcon } from "react-hot-toast";
 
 enum User {
@@ -27,13 +27,15 @@ const search = () => {
     complaintId: "",
     complainantEmail: "",
     respondentEmail: "",
-    Reason:"",
+    Reason: "",
     status: "",
   });
   const [userComplaints, setUserComplaints] = useState([]);
 
+  const { query } = useRouter();
+
   const fetchComplaint = async (complaintId: string) => {
-    if(complaintId === "") return toast.error("Please enter a complaint id");
+    if (complaintId === "") return toast.error("Please enter a complaint id");
     try {
       if (!toggle && complaintId) {
         let res = await axios.get(`/api/complaint/${complaintId}`);
@@ -47,17 +49,15 @@ const search = () => {
               status: res.data.data.status,
             })
           : setComplaintDetails({
-            complaintId: "",
-            complainantEmail: "",
-            respondentEmail: "",
-            Reason:"",
-            status: "",
+              complaintId: "",
+              complainantEmail: "",
+              respondentEmail: "",
+              Reason: "",
+              status: "",
             });
         console.log(res.data.data);
       } else {
-        let res = await axios.get(
-          `/api/complaint/all?userId=${user.id}`
-        );
+        let res = await axios.get(`/api/complaint/all?userId=${user.id}`);
         setUserComplaints(res.data.data);
       }
     } catch (error) {
@@ -65,14 +65,14 @@ const search = () => {
     }
   };
 
-  useEffect(() => {
-    user.email ? Router.push("/search") : Router.push("/login");
-    fetchComplaint(user.id);
-  }, [toggle]);
+  // useEffect(() => {
+  //   user.email ? Router.push("/search") : Router.push("/login");
+  //   fetchComplaint(user.id);
+  // }, [toggle]);
 
-  if (!user.email) {
-    return <div></div>;
-  }
+  // if (!user.email) {
+  //   return <div></div>;
+  // }
 
   return (
     <div>
@@ -95,14 +95,14 @@ const search = () => {
             >
               Track
             </h1>
-            <h1
+            {/* <h1
               className={`text-3xl font-semibold ${
                 toggle ? "text-mainColor underline" : "text-secondaryColor"
               } cursor-pointer`}
               onClick={() => setToggle(true)}
             >
               History
-            </h1>
+            </h1> */}
           </div>
           <div className="flex justify-center items-center mt-44 w-full">
             {!toggle ? (
@@ -126,6 +126,7 @@ const search = () => {
                     onChange={(e) => {
                       setComplaintId(e.target.value);
                     }}
+                    onLoadStart={() => setComplaintId(query.ComplainId)}
                     onKeyUpCapture={(e) =>
                       e.key === "Enter" && fetchComplaint(complaintId)
                     }
@@ -162,7 +163,7 @@ const search = () => {
                       complainantemail
                     </div>
                   </div>
-                 
+
                   <div>
                     <div className="p-4 border-r-2 border-secondary flex items-center justify-center font-semibold text-mainColor">
                       respondentemail
@@ -186,13 +187,13 @@ const search = () => {
                         {complaint.comaplaintId}
                       </div>
                     </div>
-                   
+
                     <div>
                       <div className="p-4 text-xs flex items-center justify-center font-semibold text-gray-600">
                         {complaint.complainantEmail}
                       </div>
                     </div>
-                   
+
                     <div>
                       <div className="p-4 text-xs flex items-center justify-center font-semibold text-gray-600">
                         {complaint.respondentEmail}
