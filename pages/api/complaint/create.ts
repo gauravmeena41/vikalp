@@ -47,14 +47,14 @@ export default async function handler(req: any, res: any) {
     //   ODR Provider: ${odrProvider.name}\n
     //   Complaint Id: ${complaint.comaplaintId}`,
     // });
-    // await sendMail({
-    //   from: process.env.MAIL_EMAIL_ID,
-    //   to: complainantEmail,
-    //   subject: "Complaint Filled Successfully",
-    //   text: `Complaint filled successfully:\n
-    //   ${complaint.complainantName} vs ${complaint.respondentName}\n
-    //   Complaint Id: ${complaint.comaplaintId}`,
-    // });
+    await sendMail({
+      from: process.env.MAIL_EMAIL_ID,
+      to: complainantEmail,
+      subject: "Complaint Filled Successfully",
+      text: `Complaint filled successfully:\n
+      ${complaint.complainantName} vs ${complaint.respondentName}\n
+      Complaint Id: ${complaint.comaplaintId}`,
+    });
     // await sendMail({
     //   from: process.env.MAIL_EMAIL_ID,
     //   to: respondentEmail,
