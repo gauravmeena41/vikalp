@@ -1,10 +1,8 @@
 // @ts-nocheck
 
 import connectDb from "../../../utils/connectDb";
-import User from "../../../models/User";
 import Complaint from "../../../models/Complaint";
-import mongoose from "mongoose";
-import { generateUniqueId, sendinfobip, sendMail } from "../../../helper";
+import { generateUniqueId, sendMail } from "../../../helper";
 
 connectDb();
 export default async function handler(req: any, res: any) {
@@ -37,16 +35,6 @@ export default async function handler(req: any, res: any) {
       respondentPhone,
       fileLink,
     });
-
-    // await sendMail({
-    //   from: process.env.MAIL_EMAIL_ID,
-    //   to: odrProvider.email,
-    //   subject: "Received a new Complaint on Vikalp",
-    //   text: `You have received a new complaint on vikalp Platform. Please checkout the details listed below:\n
-    //           ${complaint.complainantName} vs ${complaint.respondentName}\n
-    //             Complaint Id: ${complaint.comaplaintId}\n
-    //             Happy Resolving`,
-    // });
 
     await sendMail({
       from: process.env.MAIL_EMAIL_ID,
