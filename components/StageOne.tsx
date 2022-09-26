@@ -11,67 +11,7 @@ const StageOne = () => {
 
   return (
     <div className="grid grid-cols-2 gap-10 w-full">
-      <div className="space-y-6 animate-fade">
-        <h1 className="text-mainColor text-2xl font-bold">Step One</h1>
-        <p className="text-mainColor text-sm">Please enter your details.</p>
-        <div className="flex flex-col space-y-5">
-          <label
-            htmlFor="userName"
-            className="text-xl text-mainColor font-medium"
-          >
-            Name
-          </label>
-          <input
-            type="text"
-            id="userName"
-            value={complaintDetail.complainantName}
-            className="input"
-            onChange={(e) =>
-              setComplaintDetail({
-                ...complaintDetail,
-                complainantName: e.target.value,
-              })
-            }
-          />
-          <label
-            htmlFor="userEmail"
-            className="text-xl text-mainColor font-medium"
-          >
-            Email
-          </label>
-          <input
-            type="email"
-            id="userEmail"
-            value={complaintDetail.complainantEmail}
-            className="input"
-            onChange={(e) =>
-              setComplaintDetail({
-                ...complaintDetail,
-                complainantEmail: e.target.value,
-              })
-            }
-          />
-          <label
-            htmlFor="userPhone"
-            className="text-xl text-mainColor font-medium"
-          >
-            Phone
-          </label>
-          <input
-            type="text"
-            id="userPhone"
-            value={complaintDetail.complainantPhone}
-            className="input"
-            onChange={(e) =>
-              setComplaintDetail({
-                ...complaintDetail,
-                complainantPhone: e.target.value,
-              })
-            }
-          />
-        </div>
-      </div>
-      <div className="flex items-end justify-end h-[530px]">
+      <div className="flex flex-col justify-between h-[530px]">
         <div className="flex items-end justify-end space-x-2">
           <button className="button bg-secondaryColor">Prev</button>
           <button

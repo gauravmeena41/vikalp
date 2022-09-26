@@ -38,31 +38,6 @@ export default async function handler(req: any, res: any) {
       fileLink,
     });
 
-    // sendMail({
-    //   from: process,
-    //   to: [complainantEmail,respondentEmail, odrProvider.email],
-    //   subject: "Complaint Filled Successfully",
-    //   text: `Complaint filled successfully:\n
-    //   ${complaint.complainantName} vs ${complaint.respondentName}\n
-    //   ODR Provider: ${odrProvider.name}\n
-    //   Complaint Id: ${complaint.comaplaintId}`,
-    // });
-    await sendMail({
-      from: process.env.MAIL_EMAIL_ID,
-      to: complainantEmail,
-      subject: "Complaint Filled Successfully",
-      text: `Complaint filled successfully:\n
-      ${complaint.complainantName} vs ${complaint.respondentName}\n
-      Complaint Id: ${complaint.comaplaintId}`,
-    });
-    // await sendMail({
-    //   from: process.env.MAIL_EMAIL_ID,
-    //   to: respondentEmail,
-    //   subject: "Complaint Filled against You",
-    //   text: `A complaint has been filled aginst you by ${complaint.complainantName}\n
-    //            Dispute will be resolved by SAMA\n
-    //            Complaint Id of the same is ${complaint.comaplaintId}`,
-    // });
     // await sendMail({
     //   from: process.env.MAIL_EMAIL_ID,
     //   to: odrProvider.email,
@@ -76,6 +51,23 @@ export default async function handler(req: any, res: any) {
     res.status(200).json({
       status: 1,
       data: complaint,
+    });
+
+    await sendMail({
+      from: process.env.MAIL_EMAIL_ID,
+      to: complainantEmail,
+      subject: "Complaint Filled Successfully",
+      text: `Complaint filled successfully:\n
+      ${complaint.complainantName} vs ${complaint.respondentName}\n
+      Complaint Id: ${complaint.comaplaintId}`,
+    });
+    await sendMail({
+      from: process.env.MAIL_EMAIL_ID,
+      to: respondentEmail,
+      subject: "Complaint Filled against You",
+      text: `A complaint has been filled aginst you by ${complaint.complainantName}\n
+               Dispute will be resolved by SAMA\n
+               Complaint Id of the same is ${complaint.comaplaintId}`,
     });
   } catch (error) {
     console.error(error.message);
