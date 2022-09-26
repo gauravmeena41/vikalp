@@ -48,11 +48,6 @@ export default async function handler(req: any, res: any) {
     //             Happy Resolving`,
     // });
 
-    res.status(200).json({
-      status: 1,
-      data: complaint,
-    });
-
     await sendMail({
       from: process.env.MAIL_EMAIL_ID,
       to: complainantEmail,
@@ -68,6 +63,11 @@ export default async function handler(req: any, res: any) {
       text: `A complaint has been filled aginst you by ${complaint.complainantName}\n
                Dispute will be resolved by SAMA\n
                Complaint Id of the same is ${complaint.comaplaintId}`,
+    });
+
+    res.status(200).json({
+      status: 1,
+      data: complaint,
     });
   } catch (error) {
     console.error(error.message);
