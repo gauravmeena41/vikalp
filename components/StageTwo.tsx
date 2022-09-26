@@ -1,7 +1,4 @@
-// @ts-nocheck
-
-import { ChevronLeftIcon, ChevronRightIcon } from "@heroicons/react/solid";
-import React, { useState } from "react";
+import React from "react";
 import toast from "react-hot-toast";
 import { useRecoilState } from "recoil";
 import { complaintDetails } from "../atoms/complaintDetails";
