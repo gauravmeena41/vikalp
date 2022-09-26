@@ -17,11 +17,11 @@ const FileComplaint = () => {
   return (
     <div className="ml-32 mr-24 mb-10 mt-24">
       <div className="flex space-x-28">
-        {complaintDetail.stage < 4 && <ProgressBar />}
-        {complaintDetail.stage == 0 && <StageOne />}
-        {complaintDetail.stage == 1 && <StageTwo />}
-        {complaintDetail.stage == 2 && <StageThree />}
-        {complaintDetail.stage == 3 && <StageFour />}
+        {complaintDetail.stage < 3 && <ProgressBar />}
+        {/* {complaintDetail.stage == 0 && <StageOne />} */}
+        {complaintDetail.stage == 0 && <StageTwo />}
+        {complaintDetail.stage == 1 && <StageThree />}
+        {complaintDetail.stage == 2 && <StageFour />}
       </div>
     </div>
   );

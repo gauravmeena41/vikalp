@@ -38,9 +38,6 @@ const StageFour = () => {
         complaintDescription: "",
         complaintCategory: "",
         expectedResolution: "",
-        complainantName: "",
-        complainantEmail: "",
-        complainantPhone: "",
         respondentName: "",
         respondentEmail: "",
         respondentPhone: "",
@@ -62,89 +59,88 @@ const StageFour = () => {
 
   return (
     <div className="grid grid-cols-2 gap-10 w-full">
-      <div className="space-y-5 animate-fade">
+      <div className="space-y-5">
         <h1 className="text-mainColor text-2xl font-bold">Step Four</h1>
         <p className="text-mainColor text-sm">What redress are you seeking?</p>
-        <div className="relative">
-          <div
-            onClick={() => setShowDropDown(!showDropDown)}
-            className={`w-[300px] px-5 py-2 text-xl font-medium text-purple-300 cursor-pointer border-2 border-purple-300 rounded-[2rem]`}
-          >
-            {!showDropDown &&
-              (complaintDetail.expectedResolution
-                ? complaintDetail.expectedResolution
-                : " Select an option")}
-            {showDropDown &&
-              categories.map((category, key) => (
-                <div
-                  key={key}
-                  className="py-2 text-xl font-medium text-purple-300 cursor-pointer
+        <div className="space-y-5 animate-fade">
+          <div className="relative">
+            <div
+              onClick={() => setShowDropDown(!showDropDown)}
+              className={`w-[300px] px-5 py-2 text-xl font-medium text-purple-300 cursor-pointer border-2 border-purple-300 rounded-[2rem]`}
+            >
+              {!showDropDown &&
+                (complaintDetail.expectedResolution
+                  ? complaintDetail.expectedResolution
+                  : " Select an option")}
+              {showDropDown &&
+                categories.map((category, key) => (
+                  <div
+                    key={key}
+                    className="py-2 text-xl font-medium text-purple-300 cursor-pointer
                 hover:text-mainColor last-of-type:rounded-b-lg"
-                  onClick={(e) => {
-                    setComplaintDetail({
-                      ...complaintDetail,
-                      expectedResolution: e.target.innerHTML,
-                    });
-                    setShowDropDown(false);
-                  }}
-                >
-                  {category}
-                </div>
-              ))}
-          </div>
-        </div>
-        {complaintDetail.expectedResolution === "Other" && (
-          <div className="animate-slide-down">
-            {/* <p className="text-mainColor text-sm">
-              Tell us about the redressal you seek briefly
-            </p> */}
-            <textarea
-              onChange={(e) =>
-                setComplaintDetail({
-                  ...complaintDetail,
-                  expectedResolutionDescription: e.target.value,
-                })
-              }
-              name=""
-              value={complaintDetail.expectedResolutionDescription}
-              placeholder="Tell us about the redressal you seek briefly"
-              className={`border-[2px] border-purple-300 p-4 w-[350px] h-[150px] outline-none
-          rounded-[2rem] text-purple-400 resize-none placeholder:text-purple-300`}
-            ></textarea>
-          </div>
-        )}
-        <p className="text-mainColor text-sm">
-          Attach any file that will help the Neutral resolve your case
-        </p>
-        <label
-          className="w-[150px] flex items-center justify-center p-4 rounded-full text-mainColor font-bold cursor-pointer border-2
-            border-secondaryColor text-lg"
-          htmlFor="chooseFile"
-        >
-          {!complaintDetail.file.fileLink ? (
-            <div className="flex items-center">
-              <ArrowCircleUpIcon className="w-7 h-7 text-mainColor mr-2" />
-              <p>Upload</p>
+                    onClick={(e) => {
+                      setComplaintDetail({
+                        ...complaintDetail,
+                        expectedResolution: e.target.innerHTML,
+                      });
+                      setShowDropDown(false);
+                    }}
+                  >
+                    {category}
+                  </div>
+                ))}
             </div>
-          ) : (
-            String(complaintDetail.file.fileLink).split(".")[0].slice(0, 12)
+          </div>
+          {complaintDetail.expectedResolution === "Other" && (
+            <div className="animate-slide-down">
+              <textarea
+                onChange={(e) =>
+                  setComplaintDetail({
+                    ...complaintDetail,
+                    expectedResolutionDescription: e.target.value,
+                  })
+                }
+                name=""
+                value={complaintDetail.expectedResolutionDescription}
+                placeholder="Tell us about the redressal you seek briefly"
+                className={`border-[2px] border-purple-300 p-4 w-[350px] h-[150px] outline-none
+          rounded-[2rem] text-purple-400 resize-none placeholder:text-purple-300`}
+              ></textarea>
+            </div>
           )}
-        </label>
-        <input
-          type="file"
-          name=""
-          id="chooseFile"
-          className="hidden"
-          onChange={(e) =>
-            setComplaintDetail({
-              ...complaintDetail,
-              file: {
-                ...complaintDetail.file,
-                fileLink: e.target.files[0].name,
-              },
-            })
-          }
-        />
+          <p className="text-mainColor text-sm">
+            Attach any file that will help the Neutral resolve your case
+          </p>
+          <label
+            className="w-[150px] flex items-center justify-center p-4 rounded-full text-mainColor font-bold cursor-pointer border-2
+            border-secondaryColor text-lg"
+            htmlFor="chooseFile"
+          >
+            {!complaintDetail.file.fileLink ? (
+              <div className="flex items-center">
+                <ArrowCircleUpIcon className="w-7 h-7 text-mainColor mr-2" />
+                <p>Upload</p>
+              </div>
+            ) : (
+              String(complaintDetail.file.fileLink).split(".")[0].slice(0, 12)
+            )}
+          </label>
+          <input
+            type="file"
+            name=""
+            id="chooseFile"
+            className="hidden"
+            onChange={(e) =>
+              setComplaintDetail({
+                ...complaintDetail,
+                file: {
+                  ...complaintDetail.file,
+                  fileLink: e.target.files[0].name,
+                },
+              })
+            }
+          />
+        </div>
       </div>
       <div className="flex items-end justify-end h-[530px]">
         <div className="flex items-end justify-end space-x-2">

@@ -30,7 +30,6 @@ const search = () => {
     Reason: "",
     status: "",
   });
-  const [userComplaints, setUserComplaints] = useState([]);
 
   const { query } = useRouter();
 

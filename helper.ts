@@ -40,15 +40,17 @@ export const generateUniqueId = async () => {
 
 export const sendMail = async (mailOptions) => {
   try {
-    await nodemailer
+    if (!process.env.COMMUNICATION) return console.log("no communication");
+    let res = await nodemailer
       .createTransport({
         service: "hotmail",
         auth: {
-          user: "vikalp.sama@hotmail.com",
+          user: process.env.MAIL_EMAIL_ID,
           pass: process.env.MAIL_PASSWORD,
         },
       })
       .sendMail(mailOptions);
+    console.log(res);
   } catch (error) {
     console.log(error);
   }
