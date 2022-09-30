@@ -165,11 +165,13 @@ const StageFour = () => {
           <button
             className="button bg-mainColor"
             onClick={() =>
-              complaintDetail.expectedResolutionDescription
-                ? complaintDetail.expectedResolutionDescription.match(
-                    /^[a-zA-Z0-9_ ]*$/
-                  ) && complaintDetail.expectedResolution
-                : complaintDetail.expectedResolution
+              (
+                complaintDetail.expectedResolutionDescription
+                  ? complaintDetail.expectedResolutionDescription.match(
+                      /^[a-zA-Z0-9_ ]*$/
+                    ) && complaintDetail.expectedResolution
+                  : complaintDetail.expectedResolution
+              )
                 ? fileComplaint()
                 : toast.error("Please fill all the fields correctly")
             }
