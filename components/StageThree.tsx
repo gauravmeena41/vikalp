@@ -23,7 +23,7 @@ const StageThree = () => {
   return (
     <div className="grid grid-cols-2 gap-10">
       <div className="space-y-5 border-r-[3px] border-mainColor">
-        <h1 className="text-mainColor text-2xl font-bold">Step Three</h1>
+        <h1 className="text-mainColor text-2xl font-bold">Step Two</h1>
         <p className="text-mainColor text-sm">Tell us about your complaint</p>
         <div className="animate-fade">
           <textarea
@@ -36,8 +36,13 @@ const StageThree = () => {
             name=""
             value={complaintDetail.complaintDescription}
             placeholder="Write here..."
-            className="border-[2px] border-purple-300 p-4 w-[350px] h-[250px] outline-none
-          rounded-[2rem] text-purple-400 resize-none placeholder:text-purple-300"
+            className={`border-[2px] ${
+              complaintDetail.complaintDescription &&
+              !complaintDetail.complaintDescription.match(/^[a-zA-Z0-9_ ]*$/)
+                ? "border-red-500 text-red-500"
+                : "border-purple-300 text-purple-400"
+            } p-4 w-[350px] h-[250px] outline-none
+            rounded-[2rem]  resize-none placeholder:text-purple-300`}
           ></textarea>
           <p className="text-mainColor font-medium text-lg">Category</p>
           <div className="flex flex-wrap">
@@ -106,12 +111,12 @@ const StageThree = () => {
               className="button bg-mainColor"
               onClick={() =>
                 complaintDetail.complaintCategory &&
-                complaintDetail.complaintDescription
+                complaintDetail.complaintDescription.match(/^[a-zA-Z0-9_ ]*$/)
                   ? setComplaintDetail({
                       ...complaintDetail,
                       stage: complaintDetail.stage + 1,
                     })
-                  : toast.error("Please fill all the fields")
+                  : toast.error("Please fill all the fields correctly")
               }
             >
               Next

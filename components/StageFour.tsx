@@ -60,7 +60,7 @@ const StageFour = () => {
   return (
     <div className="grid grid-cols-2 gap-10 w-full">
       <div className="space-y-5">
-        <h1 className="text-mainColor text-2xl font-bold">Step Four</h1>
+        <h1 className="text-mainColor text-2xl font-bold">Step Three</h1>
         <p className="text-mainColor text-sm">What redress are you seeking?</p>
         <div className="space-y-5 animate-fade">
           <div className="relative">
@@ -103,8 +103,15 @@ const StageFour = () => {
                 name=""
                 value={complaintDetail.expectedResolutionDescription}
                 placeholder="Tell us about the redressal you seek briefly"
-                className={`border-[2px] border-purple-300 p-4 w-[350px] h-[150px] outline-none
-          rounded-[2rem] text-purple-400 resize-none placeholder:text-purple-300`}
+                className={`border-[2px] ${
+                  complaintDetail.expectedResolutionDescription &&
+                  !complaintDetail.expectedResolutionDescription.match(
+                    /^[a-zA-Z0-9_ ]*$/
+                  )
+                    ? "border-red-500 text-red-500"
+                    : "border-purple-300 text-purple-400"
+                }  p-4 w-[350px] h-[150px] outline-none
+          rounded-[2rem]  resize-none placeholder:text-purple-300`}
               ></textarea>
             </div>
           )}
@@ -158,9 +165,13 @@ const StageFour = () => {
           <button
             className="button bg-mainColor"
             onClick={() =>
-              complaintDetail.expectedResolution
+              complaintDetail.expectedResolutionDescription
+                ? complaintDetail.expectedResolutionDescription.match(
+                    /^[a-zA-Z0-9_ ]*$/
+                  ) && complaintDetail.expectedResolution
+                : complaintDetail.expectedResolution
                 ? fileComplaint()
-                : toast.error("Please fill all the fields")
+                : toast.error("Please fill all the fields correctly")
             }
           >
             {!loading ? (

@@ -10,7 +10,7 @@ const StageTwo = () => {
   return (
     <div className="grid grid-cols-2 gap-10 w-full">
       <div className="space-y-6 border-r-[3px] border-mainColor">
-        <h1 className="text-mainColor text-2xl font-bold">Step Two</h1>
+        <h1 className="text-mainColor text-2xl font-bold">Step One</h1>
         <p className="text-mainColor text-sm">
           Against whom would you like to raise this grievance?
         </p>
@@ -25,7 +25,11 @@ const StageTwo = () => {
             type="text"
             id="userName"
             value={complaintDetail.respondentName}
-            className="input"
+            className={`input ${
+              complaintDetail.respondentName &&
+              !complaintDetail.respondentName.match(/^[a-zA-Z_ ]*$/) &&
+              "border-red-500 text-red-500"
+            }`}
             onChange={(e) =>
               setComplaintDetail({
                 ...complaintDetail,
@@ -43,7 +47,13 @@ const StageTwo = () => {
             type="email"
             id="userEmail"
             value={complaintDetail.respondentEmail}
-            className="input"
+            className={`input ${
+              complaintDetail.respondentEmail &&
+              !complaintDetail.respondentEmail.match(
+                /^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/
+              ) &&
+              "border-red-500 text-red-500"
+            }`}
             onChange={(e) =>
               setComplaintDetail({
                 ...complaintDetail,
@@ -61,7 +71,11 @@ const StageTwo = () => {
             type="text"
             id="userPhone"
             value={complaintDetail.respondentPhone}
-            className="input"
+            className={`input ${
+              complaintDetail.respondentPhone &&
+              !complaintDetail.respondentPhone.match(/^\d{10}$/) &&
+              "border-red-500 text-red-500"
+            }`}
             onChange={(e) =>
               setComplaintDetail({
                 ...complaintDetail,
@@ -139,7 +153,7 @@ const StageTwo = () => {
           <button
             className="button bg-mainColor"
             onClick={() =>
-              complaintDetail.respondentName &&
+              complaintDetail.respondentName.match(/^[a-zA-Z_ ]*$/) &&
               complaintDetail.respondentEmail.match(
                 /^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/
               ) &&
