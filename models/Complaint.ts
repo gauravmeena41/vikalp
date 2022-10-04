@@ -1,6 +1,10 @@
 import mongoose, { Schema } from "mongoose";
 
 const ComplaintSchema = new Schema({
+  vua: {
+    type: String,
+    required: true,
+  },
   comaplaintId: {
     type: String,
     required: true,

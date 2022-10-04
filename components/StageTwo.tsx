@@ -89,7 +89,9 @@ const StageTwo = () => {
         <div className="h-full pl-20">
           <div className="space-y-6">
             <h1 className="text-mainColor text-2xl font-bold">Complainant</h1>
-            <p className="text-mainColor text-sm">&nbsp;</p>
+            <p className="text-white text-lg bg-mainColor w-fit px-5 py-1 rounded-[2rem] font-medium">
+              <span className="font-bold">VUA - </span> {complaintDetail.vua}
+            </p>
             <div className="flex flex-col space-y-5">
               <label
                 htmlFor="userName"

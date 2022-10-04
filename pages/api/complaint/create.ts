@@ -8,6 +8,7 @@ connectDb();
 export default async function handler(req: any, res: any) {
   try {
     const {
+      vua,
       odrProviderId,
       complaintDescription,
       complaintCategory,
@@ -22,6 +23,7 @@ export default async function handler(req: any, res: any) {
     } = req.body;
 
     const complaint = await Complaint.create({
+      vua,
       odrProviderId,
       comaplaintId: await generateUniqueId(),
       complaintDescription,

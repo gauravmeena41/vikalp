@@ -20,6 +20,7 @@ const StageFour = () => {
     try {
       setLoading(true);
       let complaint = await axios.post("api/complaint/create", {
+        vua: complaintDetail.vua,
         odrProviderId: "62c82df5ea4b234384d2c554",
         complaintDescription: complaintDetail.complaintDescription,
         complaintCategory: complaintDetail.complaintCategory,

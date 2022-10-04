@@ -42,6 +42,7 @@ const search = () => {
       res.data.data
         ? setComplaintDetails({
             complaintId: res.data.data.comaplaintId,
+            vua: res.data.data.vua,
             complainantEmail: res.data.data.complainantEmail,
             respondentEmail: res.data.data.respondentEmail,
             Reason: res.data.data.complaintDescription,
@@ -49,6 +50,7 @@ const search = () => {
           })
         : setComplaintDetails({
             complaintId: "",
+            vua: "",
             complainantEmail: "",
             respondentEmail: "",
             Reason: "",
@@ -105,7 +107,7 @@ const search = () => {
                 />
               </div>
               {complaintDetails.status && complaintId && (
-                <div className="grid grid-cols-5 w-[100vw] animate-slide-down">
+                <div className="grid grid-cols-6 w-[100vw] animate-slide-down">
                   {Object.entries(complaintDetails).map(([key, value]) => (
                     <div className="">
                       <div
