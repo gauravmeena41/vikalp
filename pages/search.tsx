@@ -83,7 +83,7 @@ const search = () => {
           <div className="flex justify-center items-center mt-32 w-full">
             <div className="space-y-10 flex flex-col items-center justify-center">
               <h1 className="text-mainColor text-center font-bold text-xl">
-                Enter Case ID
+                Enter Complaint ID
               </h1>
               <div className="relative">
                 <SearchIcon
@@ -112,11 +112,11 @@ const search = () => {
                     <div className="">
                       <div
                         className="p-4 flex items-center justify-center font-semibold text-mainColor
-                                         bg-[#fbf3ff] uppercase"
+                                         bg-[#fbf3ff] uppercase tracking-wider"
                       >
                         {key}
                       </div>
-                      <div className="p-4 flex items-center justify-center text-gray-500 text-xs font-semibold">
+                      <div className="p-4 flex items-center justify-center text-gray-500 text-xs font-semibold tracking-wider">
                         {value}
                       </div>
                     </div>
