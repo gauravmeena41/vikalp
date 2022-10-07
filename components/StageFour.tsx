@@ -34,6 +34,11 @@ const StageFour = () => {
         file: complaintDetail.file.fileName?.trim(),
       });
 
+      complaint && toast.success("Complaint filled successfully 🙂");
+      setLoading(false);
+      complaint &&
+        Router.push(`/search?ComplainId=${complaint.data.data.comaplaintId}`);
+
       setComplaintDetail({
         stage: 0,
         complaintDescription: "",
@@ -47,11 +52,6 @@ const StageFour = () => {
           fileType: "",
         },
       });
-
-      complaint && toast.success("Complaint filled successfully 🙂");
-      setLoading(false);
-      complaint &&
-        Router.push(`/search?ComplainId=${complaint.data.data.comaplaintId}`);
     } catch (err) {
       console.log(err);
       toast.error("Something went wrong ☹️");
@@ -68,7 +68,7 @@ const StageFour = () => {
           <div className="relative">
             <div
               onClick={() => setShowDropDown(!showDropDown)}
-              className={`w-[300px] px-5 py-2 text-xl font-medium text-purple-300 cursor-pointer border-2 border-purple-300 rounded-[2rem]`}
+              className={`w-[300px] px-5 py-2 text-xl font-medium text-mainColor cursor-pointer border-2 border-secondaryColorLight rounded-[2rem]`}
             >
               {!showDropDown &&
                 (complaintDetail.expectedResolution
@@ -78,7 +78,7 @@ const StageFour = () => {
                 categories.map((category, key) => (
                   <div
                     key={key}
-                    className="py-2 text-xl font-medium text-purple-300 cursor-pointer
+                    className="py-2 text-xl font-medium text-mainColor cursor-pointer
                 hover:text-mainColor last-of-type:rounded-b-lg"
                     onClick={(e) => {
                       setComplaintDetail({
@@ -111,9 +111,9 @@ const StageFour = () => {
                     /^[a-zA-Z0-9_ ]*$/
                   )
                     ? "border-red-500 text-red-500"
-                    : "border-purple-300 text-purple-400"
+                    : "border-secondaryColorLight text-mainColor"
                 }  p-4 w-[350px] h-[150px] outline-none
-          rounded-[2rem]  resize-none placeholder:text-purple-300`}
+          rounded-[2rem]  resize-none placeholder:text-secondaryColorLight`}
               ></textarea>
             </div>
           )}
@@ -121,7 +121,7 @@ const StageFour = () => {
             Attach any file that will help the Neutral resolve your case
           </p>
           <label
-            className="w-[150px] flex items-center justify-center p-4 rounded-full text-mainColor font-bold cursor-pointer border-2
+            className="min-w-[150px] max-w-fit flex items-center justify-center p-4 rounded-full text-mainColor font-bold cursor-pointer border-2
             border-secondaryColor text-lg"
             htmlFor="chooseFile"
           >
@@ -144,7 +144,7 @@ const StageFour = () => {
                 ...complaintDetail,
                 file: {
                   ...complaintDetail.file,
-                  fileLink: e.target.files[0].name,
+                  fileLink: e?.target?.files[0]?.name,
                 },
               })
             }
@@ -169,7 +169,7 @@ const StageFour = () => {
             onClick={() =>
               complaintDetail.expectedResolution
                 ? fileComplaint()
-                : toast.error("Please fill all the fields correctly")
+                : toast.error("Please Select Your Expected Redressal")
             }
           >
             {!loading ? (

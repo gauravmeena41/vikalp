@@ -86,9 +86,10 @@ const StageTwo = () => {
             type="text"
             id="userPhone"
             value={complaintDetail.respondentPhone}
+            maxLength={10}
             className={`input ${
               complaintDetail.respondentPhone &&
-              !complaintDetail.respondentPhone.match(/^\d{10}$/) &&
+              !complaintDetail.respondentPhone.match(/[6789]\d{9}/) &&
               "border-red-500 text-red-500"
             }`}
             onChange={(e) =>
@@ -184,7 +185,12 @@ const StageTwo = () => {
                     ...complaintDetail,
                     stage: complaintDetail.stage + 1,
                   })
-                : toast.error("Please fill all the fields correctly")
+                : !complaintDetail.respondentName
+                ? toast.error("Please fill Other party name correctly")
+                : !complaintDetail.respondentEmail
+                ? toast.error("Please fill Other party email correctly")
+                : !complaintDetail.respondentPhone &&
+                  toast.error("Please fill Other party phone number correctly")
             }
           >
             Next

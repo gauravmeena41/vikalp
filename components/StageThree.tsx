@@ -40,9 +40,9 @@ const StageThree = () => {
               complaintDetail.complaintDescription &&
               !complaintDetail.complaintDescription.match(/^[a-zA-Z0-9_ ]*$/)
                 ? "border-red-500 text-red-500"
-                : "border-purple-300 text-purple-400"
+                : "border-secondaryColorLight text-mainColor"
             } p-4 w-[350px] h-[250px] outline-none
-            rounded-[2rem]  resize-none placeholder:text-purple-300`}
+            rounded-[2rem] resize-none placeholder:text-secondaryColorLight font-medium`}
           ></textarea>
           <p className="text-mainColor font-medium text-lg">Category</p>
           <div className="flex flex-wrap">
@@ -110,13 +110,17 @@ const StageThree = () => {
             <button
               className="button bg-mainColor"
               onClick={() =>
-                complaintDetail.complaintCategory &&
-                complaintDetail.complaintDescription.match(/^[a-zA-Z0-9_ ]*$/)
+                complaintDetail.complaintDescription.match(
+                  /^[a-zA-Z0-9_ ]*$/
+                ) && complaintDetail.complaintCategory
                   ? setComplaintDetail({
                       ...complaintDetail,
                       stage: complaintDetail.stage + 1,
                     })
-                  : toast.error("Please fill all the fields correctly")
+                  : !complaintDetail.complaintDescription
+                  ? toast.error("Please Tell Us About Your Complaint")
+                  : !complaintDetail.complaintCategory &&
+                    toast.error("Please Select a Category")
               }
             >
               Next

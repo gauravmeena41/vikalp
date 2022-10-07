@@ -9,8 +9,9 @@ module.exports = {
         loginBackground: "url('/Images/loginBackground.png')",
       },
       colors: {
-        mainColor: "#6e44ff",
-        secondaryColor: "#DED8FE",
+        mainColor: "#914a42",
+        secondaryColor: "#f16658",
+        secondaryColorLight: "#eacaae",
       },
       boxShadow: {
         "base-shadow": "rgba(112, 144, 176, 0.32) 0px 4px 4px -2px",
