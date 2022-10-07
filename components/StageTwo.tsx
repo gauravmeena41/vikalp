@@ -20,6 +20,8 @@ const StageTwo = () => {
     });
   }, [query.id]);
 
+  console.log(complaintDetail);
+
   return (
     <div className="grid grid-cols-2 gap-10 w-full">
       <div className="space-y-6 border-r-[3px] border-mainColor">

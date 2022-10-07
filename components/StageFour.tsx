@@ -20,18 +20,18 @@ const StageFour = () => {
     try {
       setLoading(true);
       let complaint = await axios.post("api/complaint/create", {
-        vua: complaintDetail.vua,
+        vua: complaintDetail.vua?.trim(),
         odrProviderId: "62c82df5ea4b234384d2c554",
-        complaintDescription: complaintDetail.complaintDescription,
-        complaintCategory: complaintDetail.complaintCategory,
-        expectedResolution: complaintDetail.expectedResolution,
-        complainantName: complaintDetail.complainantName,
-        complainantEmail: complaintDetail.complainantEmail,
-        complainantPhone: complaintDetail.complainantPhone,
-        respondentName: complaintDetail.respondentName,
-        respondentEmail: complaintDetail.respondentEmail,
-        respondentPhone: complaintDetail.respondentPhone,
-        file: complaintDetail.file.fileName,
+        complaintDescription: complaintDetail.complaintDescription?.trim(),
+        complaintCategory: complaintDetail.complaintCategory?.trim(),
+        expectedResolution: complaintDetail.expectedResolution?.trim(),
+        complainantName: complaintDetail.complainantName?.trim(),
+        complainantEmail: complaintDetail.complainantEmail?.trim(),
+        complainantPhone: complaintDetail.complainantPhone?.trim(),
+        respondentName: complaintDetail.respondentName?.trim(),
+        respondentEmail: complaintDetail.respondentEmail?.trim(),
+        respondentPhone: complaintDetail.respondentPhone?.trim(),
+        file: complaintDetail.file.fileName?.trim(),
       });
 
       setComplaintDetail({
