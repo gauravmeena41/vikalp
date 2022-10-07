@@ -87,7 +87,7 @@ const search = () => {
               </h1>
               <div className="relative">
                 <SearchIcon
-                  className="absolute top-[0.7rem] right-4 w-8 h-8 text-secondaryColor cursor-pointer bg-white"
+                  className="absolute top-[0.8rem] right-4 w-8 h-8 text-secondaryColor cursor-pointer bg-white"
                   onClick={() => fetchComplaint(complaintId)}
                 />
 
