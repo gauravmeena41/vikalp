@@ -6,7 +6,7 @@ export const complaintDetails = atom({
   key: "complaintDetails",
   default: {
     stage: 0,
-    vua: "61684e2bd4bcd0001462a4a4",
+    vua: "",
     complaintDescription: "",
     complaintCategory: "",
     expectedResolution: "",
