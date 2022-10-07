@@ -30,7 +30,7 @@ let letters = [
   "Z",
 ];
 
-export const generateUniqueId = async () => {
+export const generateUniqueId = () => {
   return `${
     letters[Math.floor(Math.random() * letters.length)]
   }${new Date().getTime()}${

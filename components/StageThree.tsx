@@ -36,12 +36,7 @@ const StageThree = () => {
             name=""
             value={complaintDetail.complaintDescription}
             placeholder="Write here..."
-            className={`border-[2px] ${
-              complaintDetail.complaintDescription &&
-              !complaintDetail.complaintDescription.match(/^[a-zA-Z0-9_ ]*$/)
-                ? "border-red-500 text-red-500"
-                : "border-secondaryColorLight text-mainColor"
-            } p-4 w-[350px] h-[250px] outline-none
+            className={`border-[2px] border-secondaryColorLight text-mainColor p-4 w-[350px] h-[250px] outline-none
             rounded-[2rem] resize-none placeholder:text-secondaryColorLight font-medium`}
           ></textarea>
           <p className="text-mainColor font-medium text-lg">Category</p>

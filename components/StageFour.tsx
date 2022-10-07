@@ -131,7 +131,7 @@ const StageFour = () => {
                 <p>Upload</p>
               </div>
             ) : (
-              String(complaintDetail.file.fileLink).split(".")[0].slice(0, 12)
+              String(complaintDetail.file.fileLink).slice(0, 20)
             )}
           </label>
           <input
