@@ -1,4 +1,5 @@
-import React from "react";
+import { useRouter } from "next/router";
+import React, { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import { useRecoilState } from "recoil";
 import { complaintDetails } from "../atoms/complaintDetails";
@@ -6,6 +7,18 @@ import { complaintDetails } from "../atoms/complaintDetails";
 const StageTwo = () => {
   const [complaintDetail, setComplaintDetail] =
     useRecoilState(complaintDetails);
+  const router = useRouter();
+  const query = router.query;
+
+  useEffect(() => {
+    setComplaintDetail({
+      ...complaintDetail,
+      complainantName: query.name ? String(query.name) : "",
+      complainantEmail: query.email ? String(query.email) : "",
+      complainantPhone: query.phoneNo ? String(query.phoneNo) : "",
+      vua: query.id ? String(query.id) : "",
+    });
+  }, [query.id]);
 
   return (
     <div className="grid grid-cols-2 gap-10 w-full">
