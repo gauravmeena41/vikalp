@@ -10,7 +10,7 @@ const StageOne = () => {
   const [complaintDetail, setComplaintDetail] =
     useRecoilState(complaintDetails);
 
-  const categories = [
+  const categories: Array = [
     "Fraud",
     "Harassment",
     "Violence",

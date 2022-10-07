@@ -1,8 +1,7 @@
-// @ts-nocheck
-
 import { DocumentTextIcon } from "@heroicons/react/outline";
 import axios from "axios";
 import Router from "next/router";
+import { UserInfo } from "os";
 import React, { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import { useRecoilState, useRecoilValue } from "recoil";
@@ -10,10 +9,9 @@ import { complaintDetails } from "../atoms/complaintDetails";
 import { userState } from "../atoms/user";
 
 const ComplaintSummary = () => {
-  const [complaintDetail, setComplaintDetail] =
-    useRecoilState(complaintDetails);
+  const [complaintDetail, setComplaintDetail] = useRecoilState(complaintDetails);
   const user = useRecoilValue(userState);
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState<boolean>(false);
   const [odrProvider, setOdrProvider] = useState({
     id: "",
     name: "",
