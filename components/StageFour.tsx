@@ -37,7 +37,9 @@ const StageFour = () => {
       complaint && toast.success("Complaint filled successfully 🙂");
       setLoading(false);
       complaint &&
-        Router.push(`/search?ComplainId=${complaint.data.data.comaplaintId}`);
+        (await Router.push(
+          `/search?ComplainId=${complaint.data.data.comaplaintId}`
+        ));
 
       setComplaintDetail({
         stage: 0,
