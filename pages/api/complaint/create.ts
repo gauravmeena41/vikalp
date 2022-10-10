@@ -41,7 +41,7 @@ export default async function handler(req: any, res: any) {
       await sendMail({
         from: process.env.MAIL_EMAIL_ID,
         to: complainantEmail,
-        subject: "Complaint Filled Successfully",
+        subject: "Complaint Filed Successfully",
         text: `Hi ${complainantName},\n
 
         Your complaint was filed successfully. We have reached out to the other party and will have one of Sama’s expert Conciliators speak with you shortly.\n
@@ -55,7 +55,7 @@ export default async function handler(req: any, res: any) {
       await sendMail({
         from: process.env.MAIL_EMAIL_ID,
         to: respondentEmail,
-        subject: "Complaint Filled against You",
+        subject: "Complaint Filed against You",
         text: `Hello,\n
 
         We are Team Sama! Sama helps people solve their legal problems without going to court, completely online. A complaint has been filed against you by <Complainant Name>. Don’t worry, Sama is here to listen to your side of the case too.\n
