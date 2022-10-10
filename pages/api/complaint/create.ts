@@ -42,17 +42,30 @@ export default async function handler(req: any, res: any) {
         from: process.env.MAIL_EMAIL_ID,
         to: complainantEmail,
         subject: "Complaint Filled Successfully",
-        text: `Complaint filled successfully:\n
-        ${complaint.complainantName} vs ${complaint.respondentName}\n
-        Complaint Id: ${complaint.comaplaintId}`,
+        text: `Hi ${complainantName},\n
+
+        Your complaint was filed successfully. We have reached out to the other party and will have one of Sama’s expert Conciliators speak with you shortly.\n
+        
+        Sama’s Conciliators have helped resolve over 200,000 cases in the last year! Your case is in safe hands.\n
+        We look forward to helping you resolve this case peacefully.\n
+        
+        Suljhao, Magar Pyaar Se,\n
+        Team Sama`,
       });
       await sendMail({
         from: process.env.MAIL_EMAIL_ID,
         to: respondentEmail,
         subject: "Complaint Filled against You",
-        text: `A complaint has been filled aginst you by ${complaint.complainantName}\n
-                 Dispute will be resolved by SAMA\n
-                 Complaint Id of the same is ${complaint.comaplaintId}`,
+        text: `Hello,\n
+
+        We are Team Sama! Sama helps people solve their legal problems without going to court, completely online. A complaint has been filed against you by <Complainant Name>. Don’t worry, Sama is here to listen to your side of the case too.\n
+        
+        Sama will help you and ${complainantName} resolve this issue peacefully with the help of an expert Sama Conciliator. Sama’s Conciliators are trained in resolving conflict and have already resolved over 200,000 cases for Sama! Your case is in safe hands.\n
+        
+        The Sama Conciliator will get in touch with you shortly.\n
+        
+        Suljhao, Magar Pyaar Se,\n
+        Team Sama`,
       });
     } catch (error) {
       console.log(error);
