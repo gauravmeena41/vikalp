@@ -105,9 +105,8 @@ const StageThree = () => {
             <button
               className="button bg-mainColor"
               onClick={() =>
-                complaintDetail.complaintDescription.match(
-                  /^[a-zA-Z0-9_ ]*$/
-                ) && complaintDetail.complaintCategory
+                complaintDetail.complaintDescription &&
+                complaintDetail.complaintCategory
                   ? setComplaintDetail({
                       ...complaintDetail,
                       stage: complaintDetail.stage + 1,

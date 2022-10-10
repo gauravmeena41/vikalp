@@ -107,14 +107,8 @@ const StageFour = () => {
                 name=""
                 value={complaintDetail.expectedResolutionDescription}
                 placeholder="Tell us about the redressal you seek briefly"
-                className={`border-[2px] ${
-                  complaintDetail.expectedResolutionDescription &&
-                  !complaintDetail.expectedResolutionDescription.match(
-                    /^[a-zA-Z0-9_ ]*$/
-                  )
-                    ? "border-red-500 text-red-500"
-                    : "border-secondaryColorLight text-mainColor"
-                }  p-4 w-[350px] h-[150px] outline-none
+                className={`border-[2px] border-secondaryColorLight text-mainColor
+                 p-4 w-[350px] h-[150px] outline-none
           rounded-[2rem]  resize-none placeholder:text-secondaryColorLight`}
               ></textarea>
             </div>
@@ -124,7 +118,7 @@ const StageFour = () => {
           </p>
           <label
             className="min-w-[150px] max-w-fit flex items-center justify-center p-4 rounded-full text-mainColor font-bold cursor-pointer border-2
-            border-secondaryColor text-lg"
+            border-secondaryColorLight text-lg"
             htmlFor="chooseFile"
           >
             {!complaintDetail.file.fileLink ? (
