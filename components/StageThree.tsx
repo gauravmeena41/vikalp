@@ -21,7 +21,7 @@ const StageThree = () => {
   ];
 
   return (
-    <div className="grid grid-cols-2 gap-10">
+    <div className="grid grid-cols-2 gap-10 w-full">
       <div className="space-y-5 border-r-[3px] border-mainColor">
         <h1 className="text-mainColor text-2xl font-bold">Step Two</h1>
         <p className="text-mainColor text-sm">Tell us about your complaint</p>
@@ -39,8 +39,8 @@ const StageThree = () => {
             className={`border-[2px] border-secondaryColorLight text-mainColor p-4 w-[350px] h-[250px] outline-none
             rounded-[2rem] resize-none placeholder:text-secondaryColorLight font-medium`}
           ></textarea>
-          <p className="text-mainColor font-medium text-lg">Category</p>
-          <div className="flex flex-wrap">
+          {/* <p className="text-mainColor font-medium text-lg">Category</p> */}
+          {/* <div className="flex flex-wrap">
             {categories.map((category, key) => (
               <button
                 key={key}
@@ -65,7 +65,7 @@ const StageThree = () => {
                 {category}
               </button>
             ))}
-          </div>
+          </div> */}
         </div>
       </div>
       <div className="pl-20 space-y-6">
@@ -105,16 +105,13 @@ const StageThree = () => {
             <button
               className="button bg-mainColor"
               onClick={() =>
-                complaintDetail.complaintDescription &&
-                complaintDetail.complaintCategory
+                complaintDetail.complaintDescription
                   ? setComplaintDetail({
                       ...complaintDetail,
                       stage: complaintDetail.stage + 1,
                     })
-                  : !complaintDetail.complaintDescription
-                  ? toast.error("Please Tell Us About Your Complaint")
-                  : !complaintDetail.complaintCategory &&
-                    toast.error("Please Select a Category")
+                  : !complaintDetail.complaintDescription &&
+                    toast.error("Please Tell Us About Your Complaint")
               }
             >
               Next

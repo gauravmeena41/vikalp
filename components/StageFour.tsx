@@ -23,7 +23,6 @@ const StageFour = () => {
         vua: complaintDetail.vua?.trim(),
         odrProviderId: "62c82df5ea4b234384d2c554",
         complaintDescription: complaintDetail.complaintDescription?.trim(),
-        complaintCategory: complaintDetail.complaintCategory?.trim(),
         expectedResolution: complaintDetail.expectedResolution?.trim(),
         complainantName: complaintDetail.complainantName?.trim(),
         complainantEmail: complaintDetail.complainantEmail?.trim(),
@@ -44,7 +43,6 @@ const StageFour = () => {
       setComplaintDetail({
         stage: 0,
         complaintDescription: "",
-        complaintCategory: "",
         expectedResolution: "",
         respondentName: "",
         respondentEmail: "",
