@@ -21,7 +21,6 @@ const ComplaintSchema = new Schema({
   },
   complaintCategory: {
     type: String,
-    required: true,
   },
   expectedResolution: {
     type: String,
