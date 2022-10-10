@@ -172,7 +172,7 @@ const StageTwo = () => {
           </div>
         </div>
         <div className="flex items-end justify-end space-x-2">
-          <button className="button bg-secondaryColor">Prev</button>
+          {/* <button className="button bg-secondaryColor">Prev</button> */}
           <button
             className="button bg-mainColor"
             onClick={() =>

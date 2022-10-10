@@ -120,7 +120,7 @@ const search = () => {
                         {key}
                       </div>
                       <div className="p-4 flex items-center justify-center text-secondaryColor text-xs font-semibold">
-                        {value}
+                        {value ? value : "-"}
                       </div>
                     </div>
                   ))}
