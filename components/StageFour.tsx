@@ -33,7 +33,7 @@ const StageFour = () => {
         file: complaintDetail.file.fileName?.trim(),
       });
 
-      complaint && toast.success("Complaint filled successfully 🙂");
+      complaint && toast.success("Complaint filed successfully 🙂");
       setLoading(false);
       complaint &&
         (await Router.push(
@@ -148,7 +148,7 @@ const StageFour = () => {
       <div className="flex items-end justify-end h-[530px]">
         <div className="flex items-end justify-end space-x-2">
           <button
-            className="button bg-mainColor"
+            className="button bg-secondaryColor"
             onClick={() =>
               setComplaintDetail({
                 ...complaintDetail,

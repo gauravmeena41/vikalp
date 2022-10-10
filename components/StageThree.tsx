@@ -12,11 +12,10 @@ const StageThree = () => {
 
   const categories = [
     "Fraud",
-    "Harassment",
-    "Violence",
-    "Cheating",
-    "Property",
-    "Loan",
+    "Home Loan",
+    "Vehicle Loan",
+    "Personal Loan",
+    "Insurance",
     "Other",
   ];
 
@@ -39,8 +38,8 @@ const StageThree = () => {
             className={`border-[2px] border-secondaryColorLight text-mainColor p-4 w-[350px] h-[250px] outline-none
             rounded-[2rem] resize-none placeholder:text-secondaryColorLight font-medium`}
           ></textarea>
-          {/* <p className="text-mainColor font-medium text-lg">Category</p> */}
-          {/* <div className="flex flex-wrap">
+          <p className="text-mainColor font-medium text-lg">Category</p>
+          <div className="flex flex-wrap">
             {categories.map((category, key) => (
               <button
                 key={key}
@@ -59,13 +58,13 @@ const StageThree = () => {
                 className={`${
                   complaintDetail.complaintCategory === category
                     ? "bg-mainColor"
-                    : "bg-secondaryColor"
+                    : "bg-secondaryColorLight"
                 }  button ml-0 m-2 `}
               >
                 {category}
               </button>
             ))}
-          </div> */}
+          </div>
         </div>
       </div>
       <div className="pl-20 space-y-6">
@@ -92,7 +91,7 @@ const StageThree = () => {
         <div className="flex items-end justify-end h-[200px]">
           <div className="flex items-end justify-end space-x-2">
             <button
-              className="button bg-mainColor"
+              className="button bg-secondaryColor"
               onClick={() =>
                 setComplaintDetail({
                   ...complaintDetail,
