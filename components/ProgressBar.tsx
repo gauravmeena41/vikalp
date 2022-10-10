@@ -10,7 +10,7 @@ const ProgressBar = () => {
     useRecoilState(complaintDetails);
 
   return (
-    <div className="h-[500px] bg-gray-300 w-1 relative">
+    <div className="h-[500px] bg-secondaryColorLight w-1 relative">
       <div
         className={`bg-mainColor max-h-[500px]  transition-all duration-300 ease-in-out`}
         style={{
@@ -20,7 +20,9 @@ const ProgressBar = () => {
         <div
           onClick={() => setComplaintDetail({ ...complaintDetail, stage: 0 })}
           className={`absolute top-0 -left-[0.7rem] w-7 h-7 ${
-            complaintDetail.stage >= 0 ? "bg-mainColor" : "bg-gray-300"
+            complaintDetail.stage >= 0
+              ? "bg-mainColor"
+              : "bg-secondaryColorLight"
           } rounded-full transition-all duration-300 ease-in-out cursor-pointer`}
         ></div>
         <div
@@ -32,7 +34,9 @@ const ProgressBar = () => {
               : toast.error("Please fill all the fields")
           }
           className={`absolute top-1/2 -left-[0.7rem] w-7 h-7 ${
-            complaintDetail.stage >= 1 ? "bg-mainColor" : "bg-gray-300"
+            complaintDetail.stage >= 1
+              ? "bg-mainColor"
+              : "bg-secondaryColorLight"
           } rounded-full transition-all duration-300 ease-in-out cursor-pointer`}
         ></div>
         <div
@@ -43,7 +47,9 @@ const ProgressBar = () => {
               : toast.error("Please fill all the fields")
           }
           className={`absolute bottom-0 -left-[0.7rem] w-7 h-7 ${
-            complaintDetail.stage >= 2 ? "bg-mainColor" : "bg-gray-300"
+            complaintDetail.stage >= 2
+              ? "bg-mainColor"
+              : "bg-secondaryColorLight"
           } rounded-full transition-all duration-300 ease-in-out cursor-pointer`}
         ></div>
       </div>

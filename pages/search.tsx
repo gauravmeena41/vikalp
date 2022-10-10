@@ -24,11 +24,12 @@ const search = () => {
   const [toggle, setToggle] = useState(false);
   const [complaintId, setComplaintId] = useState("");
   const [complaintDetails, setComplaintDetails] = useState({
-    complaintId: "",
-    complainantEmail: "",
-    respondentEmail: "",
+    Vua: "",
+    "Complaint Id": "",
+    "Complainant Email": "",
+    "Respondent Email": "",
     Reason: "",
-    status: "",
+    Status: "",
   });
 
   const { query } = useRouter();
@@ -41,20 +42,20 @@ const search = () => {
       // !res.data.data && toast.error("Complaint Not Found !"); // Issue h isme error aayega
       res.data.data
         ? setComplaintDetails({
-            complaintId: res.data.data.comaplaintId,
-            vua: res.data.data.vua,
-            complainantEmail: res.data.data.complainantEmail,
-            respondentEmail: res.data.data.respondentEmail,
+            "Complaint Id": res.data.data.comaplaintId,
+            Vua: res.data.data.vua,
+            "Complainant Email": res.data.data.complainantEmail,
+            "Respondent Email": res.data.data.respondentEmail,
             Reason: res.data.data.complaintDescription,
-            status: res.data.data.status,
+            Status: res.data.data.status,
           })
         : setComplaintDetails({
-            complaintId: "",
-            vua: "",
-            complainantEmail: "",
-            respondentEmail: "",
+            "Complaint Id": "",
+            Vua: "",
+            "Complainant Email": "",
+            "Respondent Email": "",
             Reason: "",
-            status: "",
+            Status: "",
           });
       console.log(res.data.data);
     } catch (error) {
@@ -66,6 +67,8 @@ const search = () => {
     query.ComplainId && setComplaintId(query.ComplainId);
     complaintId && fetchComplaint(complaintId);
   }, [query.ComplainId, complaintId]);
+
+  console.log(complaintDetails);
 
   if (!complaintId) {
     return <div></div>;
@@ -87,7 +90,7 @@ const search = () => {
               </h1>
               <div className="relative">
                 <SearchIcon
-                  className="absolute top-[0.7rem] right-4 w-8 h-8 text-secondaryColor cursor-pointer bg-white"
+                  className="absolute top-[0.8rem] right-4 w-8 h-8 text-secondaryColorLight cursor-pointer bg-white"
                   onClick={() => fetchComplaint(complaintId)}
                 />
 
@@ -96,7 +99,7 @@ const search = () => {
                   placeholder="Case ID"
                   maxLength={20}
                   value={complaintId}
-                  className="w-80 p-3 text-lg text-mainColor font-medium border-[3px] border-secondaryColor rounded-[2rem] outline-none
+                  className="w-80 p-3 text-lg text-mainColor font-medium border-[3px] border-secondaryColorLight rounded-[2rem] outline-none
                     placeholder:text-secondaryColor placeholder:text-lg placeholder:font-medium"
                   onChange={(e) => {
                     setComplaintId(e.target.value);
@@ -106,17 +109,17 @@ const search = () => {
                   }
                 />
               </div>
-              {complaintDetails.status && complaintId && (
+              {complaintDetails.Status && complaintId && (
                 <div className="grid grid-cols-6 w-[100vw] animate-slide-down">
                   {Object.entries(complaintDetails).map(([key, value]) => (
                     <div className="">
                       <div
                         className="p-4 flex items-center justify-center font-semibold text-mainColor
-                                         bg-[#fbf3ff] uppercase tracking-wider"
+                                         bg-[#fff9e3]"
                       >
                         {key}
                       </div>
-                      <div className="p-4 flex items-center justify-center text-gray-500 text-xs font-semibold tracking-wider">
+                      <div className="p-4 flex items-center justify-center text-secondaryColor text-xs font-semibold">
                         {value}
                       </div>
                     </div>
