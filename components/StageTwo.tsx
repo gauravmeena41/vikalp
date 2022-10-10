@@ -18,7 +18,7 @@ const StageTwo = () => {
       complainantPhone: query.phoneNo ? String(query.phoneNo) : "",
       vua: query.id ? String(query.id) : "",
     });
-  }, [query.id]);
+  }, [query]);
 
   console.log(complaintDetail);
 
