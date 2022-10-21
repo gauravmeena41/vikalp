@@ -1,0 +1,34 @@
+version: 0.2
+phases:
+  install:
+    runtime-versions:
+      nodejs: 16
+    commands:
+      - npm install
+  pre_build:
+    commands:
+      - echo logging in to Amazon ECR
+      - aws --version
+      - aws ecr get-login-password --region ap-south-1 | docker login --username AWS --password-stdin 031084219351.dkr.ecr.ap-south-1.amazonaws.com/vikalp-server
+      - sh ./ssm-env.sh
+      - REPOSITORY_URI=031084219351.dkr.ecr.ap-south-1.amazonaws.com/vikalp-server
+      - COMMIT_HASH=$(echo $CODEBUILD_RESOLVED_SOURCE_VERSION | cut -c 1-7)
+      - echo $COMMIT_HASH
+      - echo $BRANCH_NAME
+  build:
+    commands:
+      - docker build -f WebServer.Dockerfile . -t vikalp-server:$COMMIT_HASH
+      - docker tag vikalp-server:$COMMIT_HASH $REPOSITORY_URI:$COMMIT_HASH
+      - docker tag vikalp-server:$COMMIT_HASH $REPOSITORY_URI:latest
+      - docker tag $REPOSITORY_URI:$COMMIT_HASH $REPOSITORY_URI:$BRANCH_NAME
+      - echo "pushing latest tags"
+  post_build:
+    commands:
+      - echo Pushing the Docker images...
+      - docker push $REPOSITORY_URI:latest
+      - docker push $REPOSITORY_URI:$COMMIT_HASH
+      - docker push $REPOSITORY_URI:$BRANCH_NAME
+      - echo Writing Image definition file
+      - printf '[{"name":"%s","imageUri":"%s"}]' vikalp-$BRANCH_NAME $REPOSITORY_URI:latest > imagedefinitions.json
+artifacts:
+  files: imagedefinitions.json

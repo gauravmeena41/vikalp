@@ -1,0 +1,718 @@
+AWSTemplateFormatVersion: "2010-09-09"
+Description: Vikalp Stack
+Parameters:
+  EnvironmentName:
+    Type: String
+    Default: production
+    Description:
+      A name for the environment that this cloudformation will be part of.
+      Used to locate other resources in the same environment.
+    Default: development
+    AllowedValues:
+      - development
+      - production
+  ServiceName:
+    Type: String
+    Default: vikalp-development
+    Description: A name for the service
+    AllowedValues:
+      - vikalp-development
+      - vikalp-production
+  ImageUrl:
+    Type: String
+    Default: "031084219351.dkr.ecr.ap-south-1.amazonaws.com/vikalp-server"
+    Description:
+      The url of a docker image that contains the application process that
+      will handle the traffic for this service
+  ContainerPort:
+    Type: Number
+    Default: 3000
+    Description: What port number the application inside the docker container is binding to
+  ContainerCpu:
+    Type: Number
+    Default: 512
+    Description: How much CPU to give the container. 1024 is 1 CPU
+  ContainerMemory:
+    Type: Number
+    Default: 1024
+    Description: How much memory in megabytes to give the container
+  DesiredCount:
+    Type: Number
+    Default: 1
+    Description: How many copies of the service task to run
+  MinScaleCount:
+    Type: Number
+    Default: 1
+    Description: Min Copies to run
+  MaxScaleCount:
+    Type: Number
+    Default: 10
+    Description: Max Copies to run
+  
+Mappings:
+
+  DomainMap:
+    development:
+      domain: 'vikalp.development.sama.live.'
+    production:
+      domain: 'vikalp.sama.live.'
+
+  SSLCertMap:
+    development:
+      arn: "arn:aws:acm:ap-south-1:031084219351:certificate/292ec2bd-3029-44f5-8daa-d3080093d239"
+    production:
+      arn: "arn:aws:acm:ap-south-1:031084219351:certificate/6e32a74e-131d-4717-a5d0-1afb77e3e5c9"
+
+Resources:
+  # VPC && Subnets
+
+  VPC:
+    Type: AWS::EC2::VPC
+    Properties:
+      EnableDnsSupport: true
+      EnableDnsHostnames: true
+      CidrBlock: "10.0.0.0/16"
+      Tags:
+        - Key: Name
+          Value: !Join ["-", ["vikalp", !Ref "EnvironmentName", "VPC"]]
+
+  PublicSubnetOne:
+    Type: AWS::EC2::Subnet
+    DependsOn:
+      - VPC
+    Properties:
+      AvailabilityZone:
+        Fn::Select:
+          - 0
+          - Fn::GetAZs: { Ref: "AWS::Region" }
+      VpcId: !Ref "VPC"
+      CidrBlock: "10.0.1.0/24"
+      MapPublicIpOnLaunch: true
+      Tags:
+        - Key: Name
+          Value:
+            !Join ["-", ["vikalp", !Ref "EnvironmentName", "PUB-SUBNET", "1"]]
+
+  PublicSubnetTwo:
+    Type: AWS::EC2::Subnet
+    DependsOn:
+      - VPC
+    Properties:
+      AvailabilityZone:
+        Fn::Select:
+          - 1
+          - Fn::GetAZs: { Ref: "AWS::Region" }
+      VpcId: !Ref "VPC"
+      CidrBlock: "10.0.2.0/24"
+      MapPublicIpOnLaunch: true
+      Tags:
+        - Key: Name
+          Value:
+            !Join ["-", ["vikalp", !Ref "EnvironmentName", "PUB-SUBNET", "2"]]
+
+  PublicSubnetThree:
+    Type: AWS::EC2::Subnet
+    DependsOn:
+      - VPC
+    Properties:
+      AvailabilityZone:
+        Fn::Select:
+          - 2
+          - Fn::GetAZs: { Ref: "AWS::Region" }
+      VpcId: !Ref "VPC"
+      CidrBlock: "10.0.3.0/24"
+      MapPublicIpOnLaunch: true
+      Tags:
+        - Key: Name
+          Value:
+            !Join ["-", ["vikalp", !Ref "EnvironmentName", "PUB-SUBNET", "3"]]
+
+  InternetGateway:
+    Type: AWS::EC2::InternetGateway
+    DependsOn: VPC
+    Properties:
+      Tags:
+        - Key: Name
+          Value: !Join ["-", ["vikalp", !Ref "EnvironmentName", "IGW"]]
+
+  GatewayAttachement:
+    Type: AWS::EC2::VPCGatewayAttachment
+    DependsOn:
+      - VPC
+      - InternetGateway
+    Properties:
+      VpcId: !Ref "VPC"
+      InternetGatewayId: !Ref "InternetGateway"
+
+  PublicRouteTable:
+    Type: AWS::EC2::RouteTable
+    DependsOn:
+      - VPC
+    Properties:
+      VpcId: !Ref "VPC"
+
+  PublicRoute:
+    Type: AWS::EC2::Route
+    DependsOn: 
+      - PublicRouteTable
+      - InternetGateway
+      - GatewayAttachement
+    Properties:
+      RouteTableId: !Ref "PublicRouteTable"
+      DestinationCidrBlock: "0.0.0.0/0"
+      GatewayId: !Ref "InternetGateway"
+
+  PublicSubnetOneRouteTableAssociation:
+    Type: AWS::EC2::SubnetRouteTableAssociation
+    DependsOn:
+      - PublicRouteTable
+    Properties:
+      SubnetId: !Ref PublicSubnetOne
+      RouteTableId: !Ref PublicRouteTable
+
+  PublicSubnetTwoRouteTableAssociation:
+    Type: AWS::EC2::SubnetRouteTableAssociation
+    DependsOn:
+      - PublicRouteTable
+    Properties:
+      SubnetId: !Ref PublicSubnetTwo
+      RouteTableId: !Ref PublicRouteTable
+
+  PublicSubnetThreeRouteTableAssociation:
+    Type: AWS::EC2::SubnetRouteTableAssociation
+    DependsOn:
+      - PublicRouteTable
+    Properties:
+      SubnetId: !Ref PublicSubnetThree
+      RouteTableId: !Ref PublicRouteTable
+
+  # Cluster
+
+  ECSCluster:
+    Type: AWS::ECS::Cluster
+    Properties:
+      ClusterName: !Join ["-", ["vikalp", !Ref "EnvironmentName", "CLUSTER"]]
+      ClusterSettings:
+        - Name: containerInsights
+          Value: enabled
+      Tags:
+        - Key: Environment
+          Value: !Ref "EnvironmentName"
+
+  # A security group for the containers we will run in Fargate.
+  # Two rules, allowing network traffic from a public facing load
+  # balancer and from other members of the security group.
+  #
+  # Remove any of the following ingress rules that are not needed.
+  # If you want to make direct requests to a container using its
+  # public IP address you'll need to add a security group rule
+  # to allow traffic from all IP addresses.
+
+  FargateContainerSecurityGroup:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupDescription: Access to the Fargate containers
+      VpcId: !Ref "VPC"
+  EcsSecurityGroupIngressFromPublicALB:
+    Type: AWS::EC2::SecurityGroupIngress
+    Properties:
+      Description: Ingress from the public ALB
+      GroupId: !Ref "FargateContainerSecurityGroup"
+      IpProtocol: -1
+      SourceSecurityGroupId: !Ref "PublicLoadBalancerSG"
+  EcsSecurityGroupIngressFromSelf:
+    Type: AWS::EC2::SecurityGroupIngress
+    Properties:
+      Description: Ingress from other containers in the same security group
+      GroupId: !Ref "FargateContainerSecurityGroup"
+      IpProtocol: -1
+      SourceSecurityGroupId: !Ref "FargateContainerSecurityGroup"
+
+  # Load balancers for getting traffic to containers.
+  # This sample template creates one load balancer:
+  #
+  # - One public load balancer, hosted in public subnets that is accessible
+  #   to the public, and is intended to route traffic to one or more public
+  #   facing services.
+
+  # A public facing load balancer, this is used for accepting traffic from the public
+  # internet and directing it to public facing microservices
+
+  PublicLoadBalancerSG:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupDescription: Access to the public facing load balancer
+      VpcId: !Ref "VPC"
+      SecurityGroupIngress:
+        # Allow access to ALB from anywhere on the internet
+        - CidrIp: 0.0.0.0/0
+          IpProtocol: tcp
+          FromPort: 80
+          ToPort: 80
+        - CidrIp: 0.0.0.0/0
+          IpProtocol: tcp
+          FromPort: 443
+          ToPort: 443
+
+  PublicLoadBalancer:
+    Type: AWS::ElasticLoadBalancingV2::LoadBalancer
+    DependsOn:
+      - VPC
+      - InternetGateway
+    Properties:
+      Scheme: internet-facing
+      IpAddressType: ipv4
+      Name: !Join ['-', ['vikalp' ,!Ref 'EnvironmentName', 'LB']]
+      Type: application
+      LoadBalancerAttributes:
+        - Key: idle_timeout.timeout_seconds
+          Value: "60"
+      Subnets:
+        # The load balancer is placed into the public subnets, so that traffic
+        # from the internet can reach the load balancer directly via the internet gateway
+        - !Ref PublicSubnetOne
+        - !Ref PublicSubnetTwo
+        - !Ref PublicSubnetThree
+      SecurityGroups: [!Ref "PublicLoadBalancerSG"]
+
+  # Zone records
+  DomainRecord:
+    Type: AWS::Route53::RecordSet
+    DependsOn:
+      - PublicLoadBalancer
+    Properties:
+      HostedZoneName: sama.live.
+      Type: A
+      Name: !FindInMap ['DomainMap', !Ref "EnvironmentName", 'domain']
+      AliasTarget: 
+        DNSName: !GetAtt PublicLoadBalancer.DNSName
+        HostedZoneId: !GetAtt PublicLoadBalancer.CanonicalHostedZoneID
+        EvaluateTargetHealth : false
+
+  # A dummy target group is used to setup the ALB to just drop traffic
+  # initially, before any real service target groups have been added.
+  DummyTargetGroupPublic:
+    Type: AWS::ElasticLoadBalancingV2::TargetGroup
+    DependsOn:
+      - VPC
+    Properties:
+      HealthCheckIntervalSeconds: 10
+      HealthCheckPath: /
+      HealthCheckProtocol: HTTP
+      HealthCheckTimeoutSeconds: 2
+      HealthyThresholdCount: 2
+      Name: !Join ['-', [!Ref 'EnvironmentName', 'drop-vikalp']]
+      Port: !Ref "ContainerPort"
+      Protocol: HTTP
+      UnhealthyThresholdCount: 2
+      VpcId: !Ref 'VPC'
+  PublicLoadBalancerListenerHTTP:
+    Type: AWS::ElasticLoadBalancingV2::Listener
+    DependsOn:
+      - PublicLoadBalancer
+    Properties:
+      DefaultActions:
+        - Type: redirect
+          RedirectConfig:
+            Host: "#{host}"
+            Path: "/#{path}"
+            Port: 443
+            Protocol: "HTTPS"
+            Query: "#{query}"
+            StatusCode: HTTP_301
+      LoadBalancerArn: !Ref 'PublicLoadBalancer'
+      Port: 80
+      Protocol: HTTP
+  PublicLoadBalancerListenerHTTPS:
+    Type: AWS::ElasticLoadBalancingV2::Listener
+    DependsOn:
+      - PublicLoadBalancer
+    Properties:
+      DefaultActions:
+        - TargetGroupArn: !Ref 'DummyTargetGroupPublic'
+          Type: 'forward'
+      LoadBalancerArn: !Ref 'PublicLoadBalancer'
+      Port: 443
+      Protocol: HTTPS
+      Certificates:
+        - CertificateArn: !FindInMap ['SSLCertMap', !Ref "EnvironmentName", 'arn']
+
+  # This is an IAM role which authorizes ECS to manage resources on your
+  # account on your behalf, such as updating your load balancer with the
+  # details of where your containers are, so that traffic can reach your
+  # containers.
+  ECSRole:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Statement:
+        - Effect: Allow
+          Principal:
+            Service: [ecs.amazonaws.com]
+          Action: ['sts:AssumeRole']
+      Path: /
+      Policies:
+      - PolicyName: ecs-service
+        PolicyDocument:
+          Statement:
+          - Effect: Allow
+            Action:
+              # Rules which allow ECS to attach network interfaces to instances
+              # on your behalf in order for awsvpc networking mode to work right
+              - 'ec2:AttachNetworkInterface'
+              - 'ec2:CreateNetworkInterface'
+              - 'ec2:CreateNetworkInterfacePermission'
+              - 'ec2:DeleteNetworkInterface'
+              - 'ec2:DeleteNetworkInterfacePermission'
+              - 'ec2:Describe*'
+              - 'ec2:DetachNetworkInterface'
+
+              # Rules which allow ECS to update load balancers on your behalf
+              # with the information sabout how to send traffic to your containers
+              - 'elasticloadbalancing:DeregisterInstancesFromLoadBalancer'
+              - 'elasticloadbalancing:DeregisterTargets'
+              - 'elasticloadbalancing:Describe*'
+              - 'elasticloadbalancing:RegisterInstancesWithLoadBalancer'
+              - 'elasticloadbalancing:RegisterTargets'
+            Resource: '*'
+
+  # This is a role which is used by the ECS tasks themselves.
+  ECSTaskExecutionRole:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Statement:
+        - Effect: Allow
+          Principal:
+            Service: [ecs-tasks.amazonaws.com]
+          Action: ['sts:AssumeRole']
+      Path: /
+      Policies:
+        - PolicyName: AmazonECSTaskExecutionRolePolicy
+          PolicyDocument:
+            Statement:
+            - Effect: Allow
+              Action:
+                # Allow the ECS Tasks to download images from ECR
+                - 'ecr:GetAuthorizationToken'
+                - 'ecr:BatchCheckLayerAvailability'
+                - 'ecr:GetDownloadUrlForLayer'
+                - 'ecr:BatchGetImage'
+
+                # Allow the ECS tasks to upload logs to CloudWatch
+                - 'logs:CreateLogStream'
+                - 'logs:PutLogEvents'
+              Resource: '*'
+
+  # A role used by AWS Autoscaling to get the stats for a Fargate
+  # service, and update it to increase or decrease the number of containers
+  AutoscalingRole:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Statement:
+        - Effect: Allow
+          Principal:
+            Service: [application-autoscaling.amazonaws.com]
+          Action: ['sts:AssumeRole']
+      Path: /
+      Policies:
+      - PolicyName: service-autoscaling
+        PolicyDocument:
+          Statement:
+          - Effect: Allow
+            Action:
+              - 'application-autoscaling:*'
+              - 'cloudwatch:DescribeAlarms'
+              - 'cloudwatch:PutMetricAlarm'
+              - 'ecs:DescribeServices'
+              - 'ecs:UpdateService'
+            Resource: '*'
+
+  # A log group for storing the container logs for this service
+  LogGroup:
+    Type: AWS::Logs::LogGroup
+    Properties:
+      LogGroupName:
+        !Join ["-", [!Ref "EnvironmentName", "service", !Ref "ServiceName"]]
+      RetentionInDays: 7
+
+  # The task definition. This is a simple metadata description of what
+  # container to run, and what resource requirements it has.
+  TaskDefinition:
+    Type: AWS::ECS::TaskDefinition
+    Properties:
+      Family: !Ref "ServiceName"
+      Cpu: !Ref "ContainerCpu"
+      Memory: !Ref "ContainerMemory"
+      NetworkMode: awsvpc
+      RequiresCompatibilities:
+        - FARGATE
+      ExecutionRoleArn:
+        !GetAtt ECSTaskExecutionRole.Arn
+      ContainerDefinitions:
+        - Name: !Ref "ServiceName"
+          Cpu: !Ref "ContainerCpu"
+          Memory: !Ref "ContainerMemory"
+          Image: !Join ["", [!Ref "ImageUrl", ":", !Ref "EnvironmentName"]]
+          Environment:
+            - Name: REGION
+              Value: !Ref "AWS::Region"
+            - Name: NODE_ENV
+              Value: !Ref "EnvironmentName"
+            - Name: ENV_NAME
+              Value: !Ref "EnvironmentName"
+          PortMappings:
+            - ContainerPort: !Ref "ContainerPort"
+          LogConfiguration:
+            LogDriver: "awslogs"
+            Options:
+              awslogs-group:
+                !Join [
+                  "-",
+                  [!Ref "EnvironmentName", "service", !Ref "ServiceName"],
+                ]
+              awslogs-region: !Ref "AWS::Region"
+              awslogs-stream-prefix: !Ref "ServiceName"
+  # The service. The service is a resource which allows you to run multiple
+  # copies of a type of task, and gather up their logs and metrics, as well
+  # as monitor the number of running tasks and replace any that have crashed
+  Service:
+    Type: AWS::ECS::Service
+    DependsOn:
+      - HTTPRule
+      - HTTPSRule
+    Properties:
+      ServiceName: !Ref "ServiceName"
+      Cluster: !Ref "ECSCluster"
+      LaunchType: FARGATE
+      DeploymentConfiguration:
+        MaximumPercent: 200
+        MinimumHealthyPercent: 75
+      DesiredCount: !Ref "DesiredCount"
+      NetworkConfiguration:
+        AwsvpcConfiguration:
+          AssignPublicIp: ENABLED
+          SecurityGroups:
+            - !Ref "FargateContainerSecurityGroup"
+          Subnets:
+            - !Ref "PublicSubnetOne"
+            - !Ref "PublicSubnetTwo"
+            - !Ref "PublicSubnetThree"
+      TaskDefinition: !Ref "TaskDefinition"
+      LoadBalancers:
+        - ContainerName: !Ref "ServiceName"
+          ContainerPort: !Ref "ContainerPort"
+          TargetGroupArn: !Ref "TargetGroup"
+  # A target group. This is used for keeping track of all the tasks, and
+  # what IP addresses / port numbers they have. You can query it yourself,
+  # to use the addresses yourself, but most often this target group is just
+  # connected to an application load balancer, or network load balancer, so
+  # it can automatically distribute traffic across all the targets.
+  TargetGroup:
+    Type: AWS::ElasticLoadBalancingV2::TargetGroup
+    Properties:
+      HealthCheckIntervalSeconds: 10
+      HealthCheckPath: /health-check
+      Matcher:
+        HttpCode: 200
+      HealthCheckProtocol: HTTP
+      HealthCheckTimeoutSeconds: 2
+      HealthyThresholdCount: 2
+      TargetType: ip
+      Name: !Join ["-", [!Ref "EnvironmentName", !Ref "ServiceName"]]
+      Port: !Ref "ContainerPort"
+      Protocol: HTTP
+      UnhealthyThresholdCount: 2
+      TargetGroupAttributes:
+        - Key: stickiness.enabled
+          Value: false
+        - Key: deregistration_delay.timeout_seconds
+          Value: 10
+      VpcId:
+        !Ref 'VPC'
+  # Create rules to forward both HTTP and HTTPS traffic to the service's
+  # target group. The service itself will handle redirecting HTTP traffic
+  # to HTTPS
+  HTTPRule:
+    Type: AWS::ElasticLoadBalancingV2::ListenerRule
+    Properties:
+      Actions:
+        - Type: "redirect"
+          RedirectConfig:
+            Host: "#{host}"
+            Path: "/#{path}"
+            Port: 443
+            Protocol: "HTTPS"
+            Query: "#{query}"
+            StatusCode: HTTP_301
+      Conditions:
+        - Field: path-pattern
+          Values: ["*"]
+      ListenerArn: !Ref "PublicLoadBalancerListenerHTTP"
+      Priority: 1
+  HTTPSRule:
+    Type: AWS::ElasticLoadBalancingV2::ListenerRule
+    Properties:
+      Actions:
+        - TargetGroupArn: !Ref "TargetGroup"
+          Type: "forward"
+      Conditions:
+        - Field: path-pattern
+          Values: ["*"]
+      ListenerArn: !Ref "PublicLoadBalancerListenerHTTPS"
+      Priority: 1
+  # Enable autoscaling for this service
+  ScalableTarget:
+    Type: AWS::ApplicationAutoScaling::ScalableTarget
+    DependsOn: 
+      - Service
+      - AutoscalingRole
+    Properties:
+      ServiceNamespace: "ecs"
+      ScalableDimension: "ecs:service:DesiredCount"
+      ResourceId:
+        Fn::Join:
+          - "/"
+          - - service
+            - !Ref "ECSCluster"
+            - !Ref "ServiceName"
+      MinCapacity: !Ref "MinScaleCount"
+      MaxCapacity: !Ref "MaxScaleCount"
+      RoleARN:
+        !GetAtt AutoscalingRole.Arn
+  # Create scaling policies for the service
+  ScaleDownPolicy:
+    Type: AWS::ApplicationAutoScaling::ScalingPolicy
+    DependsOn: ScalableTarget
+    Properties:
+      PolicyName:
+        Fn::Join:
+          - "/"
+          - - scale
+            - !Ref "EnvironmentName"
+            - !Ref "ServiceName"
+            - down
+      PolicyType: StepScaling
+      ResourceId:
+        Fn::Join:
+          - "/"
+          - - service
+            - !Join ["-", ["vikalp", !Ref "EnvironmentName", "CLUSTER"]]
+            - !Ref "ServiceName"
+      ScalableDimension: "ecs:service:DesiredCount"
+      ServiceNamespace: "ecs"
+      StepScalingPolicyConfiguration:
+        AdjustmentType: "ChangeInCapacity"
+        StepAdjustments:
+          - MetricIntervalUpperBound: 0
+            ScalingAdjustment: -1
+        MetricAggregationType: "Average"
+        Cooldown: 60
+  ScaleUpPolicy:
+    Type: AWS::ApplicationAutoScaling::ScalingPolicy
+    DependsOn: ScalableTarget
+    Properties:
+      PolicyName:
+        Fn::Join:
+          - "/"
+          - - scale
+            - !Ref "EnvironmentName"
+            - !Ref "ServiceName"
+            - up
+      PolicyType: StepScaling
+      ResourceId:
+        Fn::Join:
+          - "/"
+          - - service
+            - !Join ["-", ["vikalp", !Ref "EnvironmentName", "CLUSTER"]]
+            - !Ref "ServiceName"
+      ScalableDimension: "ecs:service:DesiredCount"
+      ServiceNamespace: "ecs"
+      StepScalingPolicyConfiguration:
+        AdjustmentType: "ChangeInCapacity"
+        StepAdjustments:
+          - MetricIntervalLowerBound: 0
+            MetricIntervalUpperBound: 15
+            ScalingAdjustment: 1
+          - MetricIntervalLowerBound: 15
+            MetricIntervalUpperBound: 25
+            ScalingAdjustment: 2
+          - MetricIntervalLowerBound: 25
+            ScalingAdjustment: 3
+        MetricAggregationType: "Average"
+        Cooldown: 60
+  # Create alarms to trigger these policies
+  LowCpuUsageAlarm:
+    Type: AWS::CloudWatch::Alarm
+    Properties:
+      AlarmName:
+        Fn::Join:
+          - "-"
+          - - low-cpu
+            - !Ref "EnvironmentName"
+            - !Ref "ServiceName"
+      AlarmDescription:
+        Fn::Join:
+          - " "
+          - - "Low CPU utilization for service"
+            - !Ref "ServiceName"
+            - "in stack"
+            - !Ref "EnvironmentName"
+      MetricName: CPUUtilization
+      Namespace: AWS/ECS
+      Dimensions:
+        - Name: ServiceName
+          Value: !Ref "ServiceName"
+        - Name: ClusterName
+          Value:
+            !Join ["-", ["vikalp", !Ref "EnvironmentName", "CLUSTER"]]
+      Statistic: Average
+      Period: 60
+      EvaluationPeriods: 2
+      Threshold: 10
+      ComparisonOperator: LessThanOrEqualToThreshold
+      AlarmActions:
+        - !Ref ScaleDownPolicy
+  HighCpuUsageAlarm:
+    Type: AWS::CloudWatch::Alarm
+    Properties:
+      AlarmName:
+        Fn::Join:
+          - "-"
+          - - high-cpu
+            - !Ref "EnvironmentName"
+            - !Ref "ServiceName"
+      AlarmDescription:
+        Fn::Join:
+          - " "
+          - - "High CPU utilization for service"
+            - !Ref "ServiceName"
+            - "in stack"
+            - !Ref "EnvironmentName"
+      MetricName: CPUUtilization
+      Namespace: AWS/ECS
+      Dimensions:
+        - Name: ServiceName
+          Value: !Ref "ServiceName"
+        - Name: ClusterName
+          Value:
+            !Join ["-", ["vikalp", !Ref "EnvironmentName", "CLUSTER"]]
+      Statistic: Average
+      Period: 60
+      EvaluationPeriods: 1
+      Threshold: 50
+      ComparisonOperator: GreaterThanOrEqualToThreshold
+      AlarmActions:
+        - !Ref ScaleUpPolicy
+
+
+Outputs:
+  Domain:
+    Description: Final Access Endpoint
+    Value: !Join ['', ['https://',!FindInMap ['DomainMap', !Ref "EnvironmentName", 'domain']]]
+  ExternalUrl:
+    Description: The url of the external load balancer
+    Value: !Join ['', ['http://', !GetAtt 'PublicLoadBalancer.DNSName']]
+    Export:
+      Name: !Join [ ':', [ !Ref 'EnvironmentName', 'ExternalUrl-Vikalp' ] ]
